@@ -1,9 +1,8 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Auth = () => {
-  // const navigate = useNavigate();
 
   const [data, setData] = useState({
     email: '',
@@ -31,8 +30,9 @@ const Auth = () => {
 
 
   return (
-    <div className='flex flex-col items-center mt-10'>
-      <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 min-w-[400px] max-w-[500px] border-2 border-slate-200'>
+    <div className='bg-gray-400 rounded-md shadow-2xl'>
+    <div className='flex flex-row justify-center gap-x-2 px-2 py-2'>
+      <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 min-w-[400px] max-w-[400px] border-2 border-slate-200'>
         <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Login</h2>
         <form onSubmit={handleSubmit}>
           <div>
@@ -46,6 +46,13 @@ const Auth = () => {
           </div>
         </form>
       </div>
+
+      <div className='md:flex md:flex-col items-center gap-y-5 bg-blue-100 md:p-16 p-5 hidden'>
+        <img src="src/assets/tasktracker.svg" alt="" className='w-48 mix-blend-multiply' />
+        <h2 className='text-2xl font-bold text-blue-600'>Task Tracker</h2>
+        {/* <h3 className='text-xl font-semibold'>Developed by <Link to="https://codebucketlab.com/">Code Bucket Solution Pvt Ltd</Link></h3> */}
+      </div>
+    </div>
     </div>
   )
 }
