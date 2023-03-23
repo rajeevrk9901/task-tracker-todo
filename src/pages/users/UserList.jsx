@@ -17,17 +17,17 @@ const UserList = () => {
     <div className='flex flex-col h-[85vh] w-full gap-10 '>
 
       {popup && <CreateUser popup={setPopup} />}
-      <div className='flex flex-row justify-between gap-x-5 px-16 py-8'>
+      <div className='flex md:flex-row flex-col justify-between gap-5 px-16 py-8'>
         <div>
-          <input type="text" placeholder='Search...' className='outline outline-slate-400 rounded-md px-3 py-2 w-[400px] focus:outline-2 focus:outline-blue-500' />
+          <input type="text" placeholder='Search...' className='outline outline-slate-400 rounded-md px-3 py-2  focus:outline-2 focus:outline-blue-500' />
         </div>
 
         <button type='button' onClick={handlePopup} className=' w-fit px-6 py-2 rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create User</button>
       </div>
 
       {/* userlist */}
-      <div className='grid grid-cols-4 gap-5 overflow-y-auto overflow-x-hidden py-2 px-16'>
-        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg'>
+      <div className='xl:grid-cols-4 lg:grid-cols-3 grid md:grid-cols-2 sm:grid-cols-1 gap-5 place-items-center overflow-y-auto overflow-x-hidden py-2 px-16'>
+        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg w-[340px]'>
           <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
           <div>
             <h1 className='text-xl font-semibold'>Rakesh</h1>
@@ -47,7 +47,7 @@ const UserList = () => {
             </div>
           </div>
         </div>
-        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg'>
+        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg w-[340px]'>
           <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
           <div>
             <h1 className='text-xl font-semibold'>Rakesh</h1>
@@ -67,7 +67,7 @@ const UserList = () => {
             </div>
           </div>
         </div>
-        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg'>
+        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg w-[340px]'>
           <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
           <div>
             <h1 className='text-xl font-semibold'>Rakesh</h1>
@@ -87,7 +87,7 @@ const UserList = () => {
             </div>
           </div>
         </div>
-        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg'>
+        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg w-[340px]'>
           <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
           <div>
             <h1 className='text-xl font-semibold'>Rakesh</h1>
@@ -107,7 +107,7 @@ const UserList = () => {
             </div>
           </div>
         </div>
-        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg'>
+        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg w-[340px]'>
           <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
           <div>
             <h1 className='text-xl font-semibold'>Rakesh</h1>
@@ -127,7 +127,7 @@ const UserList = () => {
             </div>
           </div>
         </div>
-        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg'>
+        <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg w-[340px]'>
           <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
           <div>
             <h1 className='text-xl font-semibold'>Rakesh</h1>
@@ -147,6 +147,8 @@ const UserList = () => {
             </div>
           </div>
         </div>
+
+       
 
 
         

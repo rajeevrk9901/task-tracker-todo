@@ -9,6 +9,7 @@ import UserList from './pages/users/UserList'
 
 import { AuthContext } from './context/AuthContext';
 import React, { useContext } from 'react'
+import CreateTask from './pages/tasklist/CreateTask'
 
 
 function App() {
@@ -22,8 +23,7 @@ function App() {
         </Routes>
       }
 
-      {
-        (role === "USER") &&
+      {(role === "USER") &&
         <Routes>
           <Route path='/tasks' element={<TaskList />} />
         </Routes>
@@ -34,6 +34,7 @@ function App() {
         <Routes>
           <Route path='/tasks' element={<TaskList />} />
           <Route path='/users' element={<UserList />} />
+          <Route path='/createtask' element={<CreateTask />} />
         </Routes>
       }
     </Layout>
