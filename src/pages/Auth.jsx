@@ -1,13 +1,19 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 
 const Auth = () => {
+  const navigate = useNavigate()
+
+  const {setRole} = useContext(AuthContext)
 
   const [data, setData] = useState({
     email: '',
     password: '',
   })
+
+  const [error, setError] = useState({})
 
   const handleData = (e) => {
     const newData = { ...data }
@@ -15,13 +21,47 @@ const Auth = () => {
     setData(newData)
   }
 
-  const handleSubmit = (e) => {
+  const validateFrom = ()=>{
+    let err = {};
+    if (data.email === '') {
+      err.email = 'email Required'
+    } else {
+      let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+      if (!emailRegex.test(data.email)) {
+        err.email = 'email not valid'
+      }
 
-    e.preventDefault();
+      if(data.password === ''){
+        err.password = 'Password required'
+      }
+      // else{
+      //   let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+      //   if(!passRegex.test(data.password)){
+      //     err.password = 'Password must be a character and number'
+      //   }
+      // }
+    }
+
+    setError({...err})
+    return Object.keys(err).length > 0 ? false : true
+  }
+
+  const handleValidate = () => {
+    let isValid = validateFrom()
+    isValid && handleSubmit();
+  }
+
+  const handleSubmit = (e) => {
+    // e.preventDefault();
     console.log(data);
-    axios.post("http://192.168.0.169:9000/api/login", data)
+    axios.post("http://localhost:9000/api/login", data)
       .then(res => {
         console.log(res.data);
+        if(res.data.success){
+          navigate("/tasks")
+          localStorage.setItem("role",res.data.role)
+          setRole(res.data.role)
+        }
 
       }).catch(err => {
         console.log(err);
@@ -29,20 +69,23 @@ const Auth = () => {
   }
 
 
+
   return (
     <div className='bg-gray-400 rounded-md shadow-2xl'>
     <div className='flex flex-row justify-center gap-x-2 px-2 py-2'>
       <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 min-w-[400px] max-w-[400px] border-2 border-slate-200'>
         <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Login</h2>
-        <form onSubmit={handleSubmit}>
+        <form>
           <div>
             <label htmlFor="email" className='text-lg'>Email</label>
             <input value={data.email} onChange={handleData} id="email" name='email' type="email" placeholder='Enter your email here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+            <p className='text-red-600 text-sm'>{error.email}</p>
 
             <label htmlFor="password" className='text-lg'>Password</label>
             <input value={data.password} onChange={handleData} id="password" name="password" type="password" placeholder='Enter your password here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+            <p className='text-red-600 text-sm'>{error.password}</p>
 
-            <button className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button>
+            <button type='button' onClick={() => handleValidate()} className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button>
           </div>
         </form>
       </div>

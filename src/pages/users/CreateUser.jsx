@@ -6,17 +6,23 @@ const CreateUser = ({ popup }) => {
   // const navigate = useNavigate();
 
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [mobile, setMobile] = useState('')
-  const [profileImg, setProfileImg] = useState('')
+  const [data, setData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    mobile: '',
+  })
+ 
+  const handleData = (e) => {
+    const newData = { ...data }
+    newData[e.target.id] = e.target.value;
+    setData(newData)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log({ name, email, password, mobile, profileImg });
+    console.log(data);
 
-    const data = { name, email, password, mobile, profileImg }
     axios.post('', data)
       .then((res) => {
         console.log(res.data, 22);
@@ -43,19 +49,19 @@ const CreateUser = ({ popup }) => {
             </div>
           </buton>
           <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Create User</h2>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div>
               <label htmlFor="name" className='text-lg'>Name</label>
-              <input value={name} onChange={(e) => setName(e.target.value)} type="text" name='' id='name' placeholder='Enter your name here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <input value={data.name} onChange={handleData} type="text" name='' id='name' placeholder='Enter your name here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
 
               <label htmlFor="email" className='text-lg'>Email</label>
-              <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" name='' id='email' placeholder='Enter your email here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <input value={data.email} onChange={handleData} type="email" name='' id='email' placeholder='Enter your email here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
 
               <label htmlFor="password" className='text-lg'>Password</label>
-              <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" name='' id='password' placeholder='Enter your password here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <input value={data.email} onChange={handleData} type="password" name='' id='password' placeholder='Enter your password here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
 
               <label htmlFor="mobile" className='text-l'>Mobile no.</label>
-              <input value={mobile} onChange={(e) => setMobile(e.target.value)} type="number" name='' id='mobile' placeholder='Enter your mobile no here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <input value={data.email} onChange={handleData} type="number" name='' id='mobile' placeholder='Enter your mobile no here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
 
               {/* <div className=''>
                 <input value={image} onChange={(e) => setImage(e.target.value)} type="file" className='text-sm text-grey-500
@@ -110,7 +116,7 @@ const CreateUser = ({ popup }) => {
               </div> */}
 
 
-              <button type='submit' className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create</button>
+              <button onClick={() => handleValidate()} type='submit' className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create</button>
 
               {/* <Link to='/login'>Login</Link> */}
 
