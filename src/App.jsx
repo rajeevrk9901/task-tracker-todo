@@ -26,6 +26,7 @@ function App() {
       {(role === "USER") &&
         <Routes>
           <Route path='/tasks' element={<TaskList />} />
+          <Route path='/createtask' element={<CreateTask />} />
         </Routes>
       }
 

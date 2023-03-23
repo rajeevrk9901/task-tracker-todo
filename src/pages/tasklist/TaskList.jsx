@@ -65,7 +65,7 @@ const TaskList = () => {
 
 
     return (
-        <div className="grid grid-cols-3 w-full px-24 gap-8 h-full pt-12">
+        <div className="grid grid-cols-3 w-full h-[85vh] px-16 gap-8  py-6 ">
             <TaskContainer tasks={tasks} status="TODO" handleTaskUpdate={handleTaskUpdate} />
             <TaskContainer tasks={tasks} status="INPROGRESS" handleTaskUpdate={handleTaskUpdate} />
             <TaskContainer tasks={tasks} status="DONE" handleTaskUpdate={handleTaskUpdate} />

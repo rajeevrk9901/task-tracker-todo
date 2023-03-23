@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext'
 const Auth = () => {
   const navigate = useNavigate()
 
-  const {setRole} = useContext(AuthContext)
+  const { setRole } = useContext(AuthContext)
 
   const [data, setData] = useState({
     email: '',
@@ -21,7 +21,7 @@ const Auth = () => {
     setData(newData)
   }
 
-  const validateFrom = ()=>{
+  const validateFrom = () => {
     let err = {};
     if (data.email === '') {
       err.email = 'email Required'
@@ -31,7 +31,7 @@ const Auth = () => {
         err.email = 'email not valid'
       }
 
-      if(data.password === ''){
+      if (data.password === '') {
         err.password = 'Password required'
       }
       // else{
@@ -42,7 +42,7 @@ const Auth = () => {
       // }
     }
 
-    setError({...err})
+    setError({ ...err })
     return Object.keys(err).length > 0 ? false : true
   }
 
@@ -57,9 +57,10 @@ const Auth = () => {
     axios.post("http://localhost:9000/api/login", data)
       .then(res => {
         console.log(res.data);
-        if(res.data.success){
+        if (res.data.success) {
           navigate("/tasks")
-          localStorage.setItem("role",res.data.role)
+          localStorage.setItem("role", res.data.role)
+          localStorage.setItem("token", res.data.token)
           setRole(res.data.role)
         }
 
@@ -72,30 +73,30 @@ const Auth = () => {
 
   return (
     <div className='bg-gray-400 rounded-md shadow-2xl'>
-    <div className='flex flex-row justify-center gap-x-2 px-2 py-2'>
-      <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 min-w-[400px] max-w-[400px] border-2 border-slate-200'>
-        <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Login</h2>
-        <form>
-          <div>
-            <label htmlFor="email" className='text-lg'>Email</label>
-            <input value={data.email} onChange={handleData} id="email" name='email' type="email" placeholder='Enter your email here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
-            <p className='text-red-600 text-sm'>{error.email}</p>
+      <div className='flex flex-row justify-center gap-x-2 px-2 py-2'>
+        <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 min-w-[400px] max-w-[400px] border-2 border-slate-200'>
+          <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Login</h2>
+          <form>
+            <div>
+              <label htmlFor="email" className='text-lg'>Email</label>
+              <input value={data.email} onChange={handleData} id="email" name='email' type="email" placeholder='Enter your email here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <p className='text-red-600 text-sm'>{error.email}</p>
 
-            <label htmlFor="password" className='text-lg'>Password</label>
-            <input value={data.password} onChange={handleData} id="password" name="password" type="password" placeholder='Enter your password here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
-            <p className='text-red-600 text-sm'>{error.password}</p>
+              <label htmlFor="password" className='text-lg'>Password</label>
+              <input value={data.password} onChange={handleData} id="password" name="password" type="password" placeholder='Enter your password here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <p className='text-red-600 text-sm'>{error.password}</p>
 
-            <button type='button' onClick={() => handleValidate()} className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button>
-          </div>
-        </form>
+              <button type='button' onClick={() => handleValidate()} className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button>
+            </div>
+          </form>
+        </div>
+
+        <div className='md:flex md:flex-col items-center gap-y-5 bg-blue-100 md:p-16 p-5 hidden'>
+          <img src="src/assets/tasktracker.svg" alt="" className='w-48 mix-blend-multiply' />
+          <h2 className='text-2xl font-bold text-blue-600'>Task Tracker</h2>
+          {/* <h3 className='text-xl font-semibold'>Developed by <Link to="https://codebucketlab.com/">Code Bucket Solution Pvt Ltd</Link></h3> */}
+        </div>
       </div>
-
-      <div className='md:flex md:flex-col items-center gap-y-5 bg-blue-100 md:p-16 p-5 hidden'>
-        <img src="src/assets/tasktracker.svg" alt="" className='w-48 mix-blend-multiply' />
-        <h2 className='text-2xl font-bold text-blue-600'>Task Tracker</h2>
-        {/* <h3 className='text-xl font-semibold'>Developed by <Link to="https://codebucketlab.com/">Code Bucket Solution Pvt Ltd</Link></h3> */}
-      </div>
-    </div>
     </div>
   )
 }

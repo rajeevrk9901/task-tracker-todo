@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Task = ({ task, handleTaskUpdate }) => {
+const UserTask = ({ task, handleTaskUpdate }) => {
     const [isDragging, setIsDragging] = useState(false);
 
     const handleDragStart = (e) => {
@@ -64,4 +64,4 @@ const Task = ({ task, handleTaskUpdate }) => {
     );
 };
 
-export default Task;
+export default UserTask;

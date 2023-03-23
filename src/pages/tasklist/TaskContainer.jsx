@@ -27,8 +27,8 @@ const TaskContainer = ({ tasks, status, handleTaskUpdate }) => {
     }
 
     return (
-        <div className={`${taskContainer}`} onDragOver={handleDragOver} onDrop={handleDrop}>
-            <h3 className="font-semibold uppercase mb-4">{status}</h3>
+        <div className={`${taskContainer} overflow-auto pb-12`} onDragOver={handleDragOver} onDrop={handleDrop}>
+            <h3 className="font-semibold uppercase mb-4 flex justify-center py-4 underline-offset-1 underline">{status}</h3>
 
             <div div className={`${taskContainer} flex flex-col gap-2`}>
                 {

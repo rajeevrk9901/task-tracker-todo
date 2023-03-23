@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 // import { Link } from 'react-router-dom'
 
 const CreateUser = ({ popup }) => {
@@ -12,27 +13,56 @@ const CreateUser = ({ popup }) => {
     password: '',
     mobile: '',
   })
- 
+
   const handleData = (e) => {
     const newData = { ...data }
     newData[e.target.id] = e.target.value;
     setData(newData)
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(data);
+  const handleSubmit = async () => {
+    // e.preventDefault()
+    console.log(data, 25);
 
-    axios.post('', data)
-      .then((res) => {
-        console.log(res.data, 22);
-        if (res.data == '') {
-          // navigate('')
+    try {
+
+      axios.post('http://localhost:9000/api/users', data, {
+        headers: {
+          // 'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
-      })
-      .catch((err => {
-        console.log(err, 23);
-      }))
+      }
+      ).then(res => {
+        console.log(res, 36)
+        console.log(res.data);
+        if (res.status === 200) {
+          popup(false)
+        }
+      }).catch(err => {
+        console.log(err);
+      }
+      )
+
+    }
+
+    // axios.post('http://localhost:9000/api/createuser', data, {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //   }
+    // }
+    // ).then(res => {
+    //   console.log(res.data);
+    //   if (res.data.success) {
+    //     popup(false)
+    //   }
+    // }).catch(err => {
+    //   console.log(err);
+    // })
+
+    catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -42,12 +72,12 @@ const CreateUser = ({ popup }) => {
 
       <div className='absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 shadow-2xl'>
         <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 min-w-[400px] max-w-[500px] border-2 border-slate-200'>
-          <buton onClick={() => popup(false)} className='flex justify-end '>
+          <button onClick={() => popup(false)} className='flex justify-end '>
             <div className='cursor-pointer relative pr-3 w-6 h-4'>
               <div className='absolute bg-black w-6 h-1 rotate-45'></div>
               <div className='absolute bg-black w-6 h-1 -rotate-45'></div>
             </div>
-          </buton>
+          </button>
           <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Create User</h2>
           <form>
             <div>
@@ -58,10 +88,10 @@ const CreateUser = ({ popup }) => {
               <input value={data.email} onChange={handleData} type="email" name='' id='email' placeholder='Enter your email here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
 
               <label htmlFor="password" className='text-lg'>Password</label>
-              <input value={data.email} onChange={handleData} type="password" name='' id='password' placeholder='Enter your password here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <input value={data.password} onChange={handleData} type="password" name='' id='password' placeholder='Enter your password here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
 
               <label htmlFor="mobile" className='text-l'>Mobile no.</label>
-              <input value={data.email} onChange={handleData} type="number" name='' id='mobile' placeholder='Enter your mobile no here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <input value={data.mobile} onChange={handleData} type="number" name='' id='mobile' placeholder='Enter your mobile no here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
 
               {/* <div className=''>
                 <input value={image} onChange={(e) => setImage(e.target.value)} type="file" className='text-sm text-grey-500
@@ -74,11 +104,11 @@ const CreateUser = ({ popup }) => {
                 <span> Upload image</span>
               </div> */}
 
-              <input value={profileImg} onChange={(e) => setProfileImg(e.target.value)} type="file" id="file" className='hidden' />
+              {/* <input value={profileImg} onChange={(e) => setProfileImg(e.target.value)} type="file" id="file" className='hidden' />
               <label for="file" className='flex justify-between items-center'>
                 <span className="file"><img src="src/assets/upload_image.png" alt="Image" /></span>
                 <span >Upload an Image</span>
-              </label>
+              </label> */}
 
 
               {/* <div class="flex items-center justify-center w-full">
@@ -116,7 +146,7 @@ const CreateUser = ({ popup }) => {
               </div> */}
 
 
-              <button onClick={() => handleValidate()} type='submit' className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create</button>
+              <button onClick={() => handleSubmit()} type='button' className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create</button>
 
               {/* <Link to='/login'>Login</Link> */}
 
