@@ -1,16 +1,31 @@
-import React from 'react'
+import React from "react";
 
-const Task = () => {
+function Task({ id, title, status, onStatusChange }) {
+  const handleDragStart = (event) => {
+    event.dataTransfer.setData("text/plain", id);
+  };
 
-    const dragStarted = (e, id)=>{
-        console.log("Drag...");
-        e.dataTransfer.setData("todo", id)
-    }
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event, newStatus) => {
+    event.preventDefault();
+    const taskId = event.dataTransfer.getData("text/plain");
+    onStatusChange(taskId, newStatus);
+  };
+
   return (
-    <div draggable onDragStart={(e)=>dragStarted(e)} className='bg-blue-400'>
-        hiiiii
+    <div
+      draggable
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDrop={(event) => handleDrop(event, status)}
+    >
+      <p>{title}</p>
+      <p>Status: {status}</p>
     </div>
-  )
+  );
 }
 
-export default Task
+export default Task;
