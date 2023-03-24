@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext'
 const Auth = () => {
   const navigate = useNavigate()
 
-  const {setRole} = useContext(AuthContext)
+  const { setRole } = useContext(AuthContext)
 
   const [data, setData] = useState({
     email: '',
@@ -21,7 +21,7 @@ const Auth = () => {
     setData(newData)
   }
 
-  const validateFrom = ()=>{
+  const validateFrom = () => {
     let err = {};
     if (data.email === '') {
       err.email = 'Email Required'
@@ -33,8 +33,20 @@ const Auth = () => {
     }
 
 
+      if (data.password === '') {
+        err.password = 'Password required'
+      }
+      // else{
+      //   let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+      //   if(!passRegex.test(data.password)){
+      //     err.password = 'Password must be a character and number'
+      //   }
+      // }
+
+
     if(data.password === ''){
       err.password = 'Password Required'
+
     }
     // else{
     //   let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
@@ -43,7 +55,7 @@ const Auth = () => {
     //   }
     // }
 
-    setError({...err})
+    setError({ ...err })
     return Object.keys(err).length > 0 ? false : true
   }
 
@@ -58,9 +70,10 @@ const Auth = () => {
     axios.post("http://localhost:9000/api/login", data)
       .then(res => {
         console.log(res.data);
-        if(res.data.success){
+        if (res.data.success) {
           navigate("/tasks")
-          localStorage.setItem("role",res.data.role)
+          localStorage.setItem("role", res.data.role)
+          localStorage.setItem("token", res.data.token)
           setRole(res.data.role)
         }
 
@@ -72,6 +85,7 @@ const Auth = () => {
 
 
   return (
+      
     <div className='bg-gray-400 rounded-md shadow-2xl mx-4'>
     <div className='flex md:flex-row flex-col-reverse justify-center md:gap-x-2 gap-y-2 px-2 py-2'>
       <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 md:w-[400px] w-[100%] border-2 border-slate-200'>
@@ -97,6 +111,7 @@ const Auth = () => {
         {/* <h3 className='text-xl font-semibold'>Developed by <Link to="https://codebucketlab.com/">Code Bucket Solution Pvt Ltd</Link></h3> */}
       </div>
     </div>
+
     </div>
   )
 }

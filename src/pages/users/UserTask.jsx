@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
-const Task = ({ task, handleTaskUpdate }) => {
+const UserTask = ({ task, handleTaskUpdate }) => {
     const [isDragging, setIsDragging] = useState(false);
 
     const handleDragStart = (e) => {
@@ -42,18 +41,18 @@ const Task = ({ task, handleTaskUpdate }) => {
 
     return (
         <div
-            className={`${taskItem} ${isDraggingClass} mx-4 justify-between px-4 py-2 flex gap-4 bg-red-200 cursor-grab shadow-md rounded-md`}
+            className={`${taskItem} ${isDraggingClass} mx-4 justify-between px-4 py-2 flex gap-4 bg-red-200 cursor-grab`}
             draggable={!isDragging}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
-            <Link to={`/task/${task._id}`} role={"heading"} className="font-serif flex items-center gap-2">{task.title}
+            <div role={"heading"} className="font-serif flex items-center gap-2">{task.title}
                 {/* {task.user.map((user) => (
                     <span key={user._id} className="font-sans text-xs">{user.name}</span>
                 ))} */}
                 <span key={task.user?._id} className="font-sans text-xs">{task.user?.name}</span>
 
-            </Link>
+            </div>
             <button className="cursor-pointer lowercase bg-yellow-300 px-2 py-[1px]" onClick={handleMoveTask}>
                 {task.status === "TODO"
                     ? "Start"
@@ -65,4 +64,4 @@ const Task = ({ task, handleTaskUpdate }) => {
     );
 };
 
-export default Task;
+export default UserTask;

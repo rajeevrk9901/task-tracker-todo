@@ -1,6 +1,10 @@
 import React from "react";
 import Task from "./Task";
 
+import { BsListTask } from 'react-icons/bs'
+import { FcProcess } from 'react-icons/fc'
+import { BiTask } from 'react-icons/bi'
+
 const TaskContainer = ({ tasks, status, handleTaskUpdate }) => {
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -27,8 +31,12 @@ const TaskContainer = ({ tasks, status, handleTaskUpdate }) => {
     }
 
     return (
-        <div className={`${taskContainer}`} onDragOver={handleDragOver} onDrop={handleDrop}>
-            <h3 className="font-semibold uppercase mb-4">{status}</h3>
+        <div className={`${taskContainer} overflow-y-auto pb-12`} onDragOver={handleDragOver} onDrop={handleDrop}>
+            <h3 className="font-semibold uppercase mb-4 flex justify-center items-center gap-2 py-4 underline-offset-1 underline">{status}
+                <span>
+                    {status === "TODO" ? <BsListTask /> : status === "INPROGRESS" ? <FcProcess /> : <BiTask />}
+                </span>
+            </h3>
 
             <div div className={`${taskContainer} flex flex-col gap-2`}>
                 {

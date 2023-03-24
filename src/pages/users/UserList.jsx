@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+
+import React, { useEffect, useState } from 'react'
 
 import CreateUser from './CreateUser'
+import axios from 'axios'
 
 import { BsListTask } from 'react-icons/bs'
 import { FcProcess } from 'react-icons/fc'
@@ -13,6 +14,33 @@ const UserList = () => {
   const [data, setData] = useState([]);
 
   const [popup, setPopup] = useState(false)
+  const [users, setUsers] = useState([])
+
+  const [stat, setStat] = useState([])
+
+  console.log(users)
+
+  useEffect(() => {
+    axios.get('http://localhost:9000/api/users')
+      .then((res) => {
+        setUsers(res.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
+
+
+  // http://192.168.0.169:9000/api/status
+  useEffect(() => {
+    axios.get('http://localhost:9000/api/status')
+      .then((res) => {
+        setStat(res.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
 
 
   // opup the create user form
@@ -52,37 +80,33 @@ const UserList = () => {
         <button type='button' onClick={handlePopup} className=' w-fit md:px-6 px-3 md:py-2 py-1 rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold md:text-xl text-base hover:duration-500 hover:scale-95'>Create User</button>
       </div>
 
-      {/* userslist */}
-      <div className='xl:grid-cols-4 lg:grid-cols-3 grid md:grid-cols-2 sm:grid-cols-1 gap-5 place-items-center overflow-y-auto overflow-x-hidden py-2 md:px-16 px-5'>
-    
-        {/* {
-          data.map((user) => {
-            return ( */}
-              <div className='flex flex-row justify-between gap-x-5 bg-gray-300 p-5 rounded-lg'>
-                <div className='flex flex-row justify-between gap-x-5'>
-                  <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
-                  <div>
-                    <h1 className='text-xl font-semibold'>Rakesh</h1>
-                    <p>rakesh@gmail.com</p>
-                    <p>8548459658</p>
-                  </div>
-                </div>
+      {/* userlist */}
+      <div className='xl:grid-cols-4 lg:grid-cols-3 grid md:grid-cols-2 sm:grid-cols-1 gap-5 place-items-center overflow-y-auto overflow-x-hidden py-2 px-16'>
+        {users.map((user) => (
+          <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg w-[340px]' key={user.id}>
+            <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
+            <div>
+              <h1 className='text-xl font-semibold'>{user.name}</h1>
+              <p>{user.email}</p>
+              <p>{user.mobile}</p>
+            </div>
 
-                <div className='flex flex-col gap-y-3 w-12'>
-                  <div className='flex flex-row justify-between items-center gap-x-2'>
-                    <BsListTask className='text-red-600' /> <span>1</span>
-                  </div>
-                  <div className='flex flex-row justify-between items-center gap-x-2'>
-                    <FcProcess className='text-green-600' /> <span>5</span>
-                  </div>
-                  <div className='flex flex-row justify-between items-center gap-x-2'>
-                    <BiTask className='text-blue-600' /> <span>15</span>
-                  </div>
+            {stat.filter((st) => st.user === user.name).map((filteredStat) => (
+              <div className='flex flex-col gap-y-3 w-12' key={filteredStat.id}>
+                <div className='flex flex-row justify-between items-center gap-x-2'>
+                  <BsListTask className='text-red-600' /> <span>{filteredStat.todoCount}</span>
+                </div>
+                <div className='flex flex-row justify-between items-center gap-x-2'>
+                  <FcProcess className='text-green-600' /> <span>{filteredStat.inprogressCount}</span>
+                </div>
+                <div className='flex flex-row justify-between items-center gap-x-2'>
+                  <BiTask className='text-blue-600' /> <span>{filteredStat.doneCount}</span>
                 </div>
               </div>
-            {/* )
-          })
-        } */}
+            ))}
+          </div>
+        ))}
+
       </div>
     </div>
   )
