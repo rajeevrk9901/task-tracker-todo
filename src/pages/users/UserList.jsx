@@ -81,13 +81,13 @@ const UserList = () => {
       </div>
 
       {/* userlist */}
-      <div className='2xl:grid-cols-4 lg:grid-cols-3 grid md:grid-cols-2 sm:grid-cols-1 gap-5 place-items-center overflow-y-auto overflow-x-hidden py-2 md:px-16 px-5 '>
+      <div className='2xl:grid-cols-4 lg:grid-cols-3 grid md:grid-cols-2 sm:grid-cols-1 gap-10 place-items-center overflow-y-auto overflow-x-hidden py-2 md:px-16 px-5 scrollbar'>
         {users.map((user) => (
-          <div className='flex flex-col gap-6 bg-gray-300 shadow-2xl p-5 rounded-lg gap-y-5 min-w-[340px] max-w-[350px]' key={user.id}>
+          <div className='flex flex-col gap-6 bg-gray-300 shadow-2xl p-5 rounded-lg gap-y-5 min-w-[320px] max-w-[350px]' key={user.id}>
             <div className='flex flex-row gap-x-5'>
               <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
-              <div>
-                <h1 className='text-xl font-semibold'>{user.name}</h1>
+              <div className='flex flex-col gap-y-2'>
+                <h1 className='text-xl font-bold text-blue-900'>{user.name}</h1>
                 <p>{user.email}</p>
                 <p>{user.mobile}</p>
               </div>
