@@ -1,10 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import axios from 'axios'
+import Toast from '../../components/toast/Toast'
 
 const CreateTask = ({ popup, setPopup }) => {
 
   const { role } = useContext(AuthContext);
+
+  const [message, setMessage] = useState("")
+  const [showToast, setShowToast] = useState(false);
 
   const [task, setTask] = useState({
     title: '',
@@ -33,6 +37,10 @@ const CreateTask = ({ popup, setPopup }) => {
     console.log(newTask);
   }
 
+  const handleToastClose = () => {
+    setShowToast(false);
+  };
+
   const handleSubmit = (e) => {
 
     try {
@@ -45,12 +53,16 @@ const CreateTask = ({ popup, setPopup }) => {
         }
       ).then((res) => {
         console.log(res, "create task response");
+        setMessage("Task Created !")
+        setShowToast(true)
         if (res.status === 200) {
           popup(false)
         }
       })
     }
     catch (error) {
+      setMessage("Server Error : Task Not Created !")
+      setShowToast(true)
       console.log(error)
     }
   }
@@ -61,6 +73,8 @@ const CreateTask = ({ popup, setPopup }) => {
 
       <div onClick={() => popup(false)} className='h-full top-0 left-0 w-full absolute opacity-40 z-10 bg-black'></div>
 
+      {showToast && <Toast message={message} onClose={handleToastClose} />}
+      
 
       <div className='absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 shadow-2xl'>
       <div className='bg-slate-50 p-6 rounded-lg flex-row shodow-md shadow-slate-300 min-w-[350px] max-w-[400px] border-2 border-slate-200'>

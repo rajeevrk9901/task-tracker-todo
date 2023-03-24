@@ -65,7 +65,7 @@ const TaskList = () => {
             .catch((error) => {
                 console.error(error);
             });
-    }, [taskReload]);
+    }, [taskReload, popup]);
 
 
 

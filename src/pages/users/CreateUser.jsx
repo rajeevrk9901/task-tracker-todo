@@ -2,8 +2,12 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 // import { Link } from 'react-router-dom'
+import Toast from '../../components/toast/Toast'
 
 const CreateUser = ({ popup }) => {
+
+  const [message, setMessage] = useState("")
+  const [showToast, setShowToast] = useState(false);
   // const navigate = useNavigate();
 
 
@@ -53,7 +57,7 @@ const CreateUser = ({ popup }) => {
       }
     }
 
-    if(data.password === ''){
+    if (data.password === '') {
       err.password = 'Password Required'
 
     }
@@ -84,31 +88,6 @@ const CreateUser = ({ popup }) => {
   }
 
 
- 
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault()
-  //   console.log(data);
-
-  //   axios.post('http://localhost:9000/api/users', data, {
-  //     headers: {
-  //       // 'Content-Type': 'application/json',
-  //       // 'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //     }
-  //   }
-  //   ).then(res => {
-  //     console.log(res, 36)
-  //     console.log(res.data);
-  //     if (res.status === 200) {
-  //       popup(false)
-  //     }
-  //   }).catch(err => {
-  //     console.log(err);
-  //   }
-  //   )
-
-  // }
-
   const handleSubmit = (e) => {
 
     // const formData = new FormData();
@@ -124,18 +103,31 @@ const CreateUser = ({ popup }) => {
       console.log(res.data);
       console.log(res, 66);
       if (res.status === 200) {
+        
+        setMessage("User Created Successfully!");
+        setShowToast(true)
         popup(false)
       }
     }).catch(err => {
-      console.log(err);
+      // console.log(err);
+      setMessage("Server Error : User Not Created!");
+      setShowToast(true)
     })
   }
+
+
+
+  const handleToastClose = () => {
+    setShowToast(false);
+  };
+
 
   return (
 
     <>
       <div onClick={() => popup(false)} className='h-full top-0 left-0 w-full absolute opacity-40 z-10 bg-black'></div>
 
+      {showToast && <Toast message={message} onClose={handleToastClose} />}
 
       <div className='absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 shadow-2xl '>
         <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 min-w-[350px] max-w-[400px] border-2 border-slate-200 '>

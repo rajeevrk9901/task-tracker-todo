@@ -2,16 +2,22 @@ import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
+import Toast from '../components/toast/Toast'
+
 
 const Auth = () => {
   const navigate = useNavigate()
 
   const { setRole } = useContext(AuthContext)
+  const [message, setMessage] = useState("")
+  const [showToast, setShowToast] = useState(false);
 
   const [data, setData] = useState({
     email: '',
     password: '',
   })
+
+  
 
   const [error, setError] = useState({})
 
@@ -57,8 +63,10 @@ const Auth = () => {
     console.log(data);
     axios.post("http://localhost:9000/api/login", data)
       .then(res => {
+        
         console.log(res.data);
         if (res.data.success) {
+          
           navigate("/tasks")
           localStorage.setItem("role", res.data.role)
           localStorage.setItem("token", res.data.token)
@@ -66,15 +74,23 @@ const Auth = () => {
         }
 
       }).catch(err => {
+        setMessage("Server Error: Login Not Successfull")
+          setShowToast(true)
         console.log(err);
       })
   }
+
+  const handleToastClose = () => {
+    setShowToast(false);
+  };
 
 
 
   return (
       
     <div className='bg-slate-50 rounded-md shadow-2xl mx-4'>
+      {showToast && <Toast message={message} onClose={handleToastClose} />}
+
     <div className='flex md:flex-row flex-col-reverse justify-center'>
       <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 md:w-[400px] w-[100%] border-2 border-slate-200'>
         <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Login</h2>
