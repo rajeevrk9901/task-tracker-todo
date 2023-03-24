@@ -1,11 +1,13 @@
 import TaskContainer from "./TaskContainer";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import CreateTask from "./CreateTask";
 
 
 const TaskList = () => {
     const [tasks, setTasks] = useState([]);
     const [taskReload, setTaskReload] = useState(false);
+    const [popup, setPopup] = useState(false)
 
     const handleTaskUpdate = async (taskId, newStatus) => {
         console.log(taskId, newStatus, 25)
@@ -62,15 +64,28 @@ const TaskList = () => {
 
 
 
-
+    const handlePopup = () => {
+        setPopup(true)
+    }
 
     return (
-        <div className="grid grid-cols-3 w-full h-[85vh] px-16 gap-8  py-6 ">
-            <TaskContainer tasks={tasks} status="TODO" handleTaskUpdate={handleTaskUpdate} />
-            <TaskContainer tasks={tasks} status="INPROGRESS" handleTaskUpdate={handleTaskUpdate} />
-            <TaskContainer tasks={tasks} status="DONE" handleTaskUpdate={handleTaskUpdate} />
-        </div>
+        <div className="w-[1200px] overflow-x-auto">
+            {popup && <CreateTask popup={setPopup} />}
 
+            <div className='flex md:flex-row flex-col gap-5 absolute'>
+                <div>
+                    <input type="text" placeholder='Search...' className='w-24 outline-slate-400 rounded-md px-3 py-1  focus:outline-2 focus:outline-blue-500 focus:w-full' />
+                </div>
+                <div>
+                    <button onClick={() => setPopup(true)} className="bg-blue-200 px-3 py-1 shadow-md rounded-md">Add Task</button>
+                </div>
+            </div>
+            <div className="grid grid-cols-3 w-full h-[85vh] px-16 gap-12  py-6 ">
+                <TaskContainer tasks={tasks} status="TODO" handleTaskUpdate={handleTaskUpdate} />
+                <TaskContainer tasks={tasks} status="INPROGRESS" handleTaskUpdate={handleTaskUpdate} />
+                <TaskContainer tasks={tasks} status="DONE" handleTaskUpdate={handleTaskUpdate} />
+            </div>
+        </div>
     );
 };
 

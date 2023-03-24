@@ -10,6 +10,7 @@ import UserList from './pages/users/UserList'
 import { AuthContext } from './context/AuthContext';
 import React, { useContext } from 'react'
 import CreateTask from './pages/tasklist/CreateTask'
+import TaskDetails from './common/TaskDetails'
 
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
         <Routes>
           <Route path='/tasks' element={<TaskList />} />
           <Route path='/createtask' element={<CreateTask />} />
+          <Route path='/task:id' element={<TaskDetails />} />
+
         </Routes>
       }
 
@@ -36,6 +39,7 @@ function App() {
           <Route path='/tasks' element={<TaskList />} />
           <Route path='/users' element={<UserList />} />
           <Route path='/createtask' element={<CreateTask />} />
+          <Route path='/task/:id' element={<TaskDetails />} />
         </Routes>
       }
     </Layout>
