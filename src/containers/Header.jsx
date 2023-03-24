@@ -19,7 +19,8 @@ const Header = () => {
     const navLinkStyles = ({ isActive }) => {
         return{
             fontWeight: isActive ? "Bold" : "normal",
-            borderBottom: isActive ? "2px solid green" : ""
+            borderBottom: isActive ? "2px solid green" : "",
+            color: isActive ? "#999" : ""
         }
     }
 
