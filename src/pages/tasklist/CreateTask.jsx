@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import axios from 'axios'
 
-const CreateTask = ({ popup }) => {
+const CreateTask = ({ popup, setPopup }) => {
 
   const { role } = useContext(AuthContext);
 
@@ -14,7 +14,7 @@ const CreateTask = ({ popup }) => {
 
   const [users, setUsers] = useState([])
 
-  console.log(users)
+  // console.log(users)
 
   useEffect(() => {
     axios.get('http://localhost:9000/api/users')
@@ -63,27 +63,32 @@ const CreateTask = ({ popup }) => {
 
 
       <div className='absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 shadow-2xl'>
-        <button onClick={() => popup(false)} className='flex justify-end absolute right-4 top-10'>
+      <div className='bg-slate-50 p-6 rounded-lg flex-row shodow-md shadow-slate-300 min-w-[350px] max-w-[400px] border-2 border-slate-200'>
+        <buton onClick={() => popup(false)} className='flex justify-end shadow-2xl'>
+
           <div className='cursor-pointer relative pr-3 w-6 h-4'>
-            <div className='absolute bg-black w-6 h-1 rotate-45'></div>
-            <div className='absolute bg-black w-6 h-1 -rotate-45'></div>
+            <div className='absolute bg-red-600  w-6 h-1 rotate-45'></div>
+            <div className='absolute bg-red-600  w-6 h-1 -rotate-45'></div>
           </div>
-        </button>
 
-        <div className='bg-slate-50 p-6 rounded-lg flex-row shodow-md shadow-slate-300 min-w-[400px] max-w-[400px] border-2 border-slate-200'>
+        </buton>
 
-          <h2 className='uppercase font-bold text-2xl flex   mb-6 text-slate-700'>Add Task</h2>
+        
+
+          <h2 className='uppercase font-bold text-2xl flex mb-6 text-slate-700 border-b-2 border-b-orange-400 w-fit'>Add Task</h2>
           <form>
             <div>
               <label htmlFor="title" className='text-lg'>Title</label>
-              <input value={task.title} onChange={handleData} id="title" name='title' type="text" placeholder='Enter Your Email' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <input value={task.title} onChange={handleData} id="title" name='title' type="text" placeholder='Enter Task Title' className='h-12 w-full rounded-md px-3 bg-transparent shadow-sm border-2 border-blue-500  focus:border-2 focus:border-yellow-700 outline-none' />
               {/* <p className='text-red-600 text-sm'>{error.email}</p> */}
 
-              <label htmlFor="description" className='text-lg'>Description</label>
-              <textarea value={task.description} onChange={handleData} rows="4" cols="50" id="description" name="description" type="text" placeholder='Enter Description' className=' w-full rounded-md border border-slate-300 px-3 py-2 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <div className='mt-5'>
+              <label htmlFor="description" className='text-lg '>Description</label>
+              <textarea value={task.description} onChange={handleData} rows="3" cols="50" id="description" name="description" type="text" placeholder='Enter Task Description' className=' w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none' />
+              </div>
 
               {role === 'ADMIN' &&
-                <select value={task.user} placeholder="Select User" onChange={handleData} id="user" className='w-full h-10 border-2 rounded-lg text-lg px-2 py-1'>
+                <select value={task.user} placeholder="Select User" onChange={handleData} id="user" className='w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none mt-5'>
                   <option value="" selected>Select User</option>
 
                   {users.map((user) => (
@@ -93,7 +98,7 @@ const CreateTask = ({ popup }) => {
                 <option value="user2">User2</option> */}
                 </select>
               }
-              <button type='button' onClick={() => handleSubmit()} className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create Task Now</button>
+              <button type='button' onClick={() => handleSubmit()} className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95 uppercase'>Create Task Now</button>
             </div>
           </form>
         </div>

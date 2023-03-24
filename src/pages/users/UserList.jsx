@@ -81,25 +81,27 @@ const UserList = () => {
       </div>
 
       {/* userlist */}
-      <div className='xl:grid-cols-4 lg:grid-cols-3 grid md:grid-cols-2 sm:grid-cols-1 gap-5 place-items-center overflow-y-auto overflow-x-hidden py-2 px-16'>
+      <div className='2xl:grid-cols-4 lg:grid-cols-3 grid md:grid-cols-2 sm:grid-cols-1 gap-5 place-items-center overflow-y-auto overflow-x-hidden py-2 md:px-16 px-5 '>
         {users.map((user) => (
-          <div className='flex flex-row gap-x-5 bg-gray-300 p-5 rounded-lg w-[340px]' key={user.id}>
-            <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
-            <div>
-              <h1 className='text-xl font-semibold'>{user.name}</h1>
-              <p>{user.email}</p>
-              <p>{user.mobile}</p>
+          <div className='flex flex-col gap-6 bg-gray-300 shadow-2xl p-5 rounded-lg gap-y-5 min-w-[340px] max-w-[350px]' key={user.id}>
+            <div className='flex flex-row gap-x-5'>
+              <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
+              <div>
+                <h1 className='text-xl font-semibold'>{user.name}</h1>
+                <p>{user.email}</p>
+                <p>{user.mobile}</p>
+              </div>
             </div>
 
             {stat.filter((st) => st.user === user.name).map((filteredStat) => (
-              <div className='flex flex-col gap-y-3 w-12' key={filteredStat.id}>
-                <div className='flex flex-row justify-between items-center gap-x-2'>
+              <div className='flex flex-row gap-y-3 w-12 gap-x-5' key={filteredStat.id}>
+                <div className='flex flex-col justify-between items-center gap-y-2'>
                   <BsListTask className='text-red-600' /> <span>{filteredStat.todoCount}</span>
                 </div>
-                <div className='flex flex-row justify-between items-center gap-x-2'>
+                <div className='flex flex-col justify-between items-center gap-y-2'>
                   <FcProcess className='text-green-600' /> <span>{filteredStat.inprogressCount}</span>
                 </div>
-                <div className='flex flex-row justify-between items-center gap-x-2'>
+                <div className='flex flex-col justify-between items-center gap-y-2'>
                   <BiTask className='text-blue-600' /> <span>{filteredStat.doneCount}</span>
                 </div>
               </div>

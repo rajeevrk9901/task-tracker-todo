@@ -14,61 +14,121 @@ const CreateUser = ({ popup }) => {
     mobile: '',
   })
 
+  const [profileImg, setProfileImg] = useState('')
 
-  //const [profileImg, setProfileImg] = useState('')
+  const [error, setError] = useState({})
+
 
   const handleData = (e) => {
     const newData = { ...data }
     newData[e.target.id] = e.target.value;
     setData(newData)
+    console.log(newData);
   }
-
 
   const handleImage = (e) => {
-    setProfileImg(e.target.files[0])
+    console.log(e.target.files[0]);
+    // setProfileImg({ profileImg: e.target.files[0] });
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(data);
+  // vallidation
+  const validateFrom = () => {
+    let err = {};
 
-      axios.post('http://localhost:9000/api/users', data, {
-        headers: {
-          // 'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+    if (data.name === '') {
+      err.name = 'Name Required'
+    } else {
+      let nameRegex = /^[a-zA-Z ]{3,30}$/
+      if (!nameRegex.test(data.name)) {
+        err.name = 'Name Not Valid'
       }
-      ).then(res => {
-        console.log(res, 36)
-        console.log(res.data);
-        if (res.status === 200) {
-          popup(false)
-        }
-      }).catch(err => {
-        console.log(err);
-      }
-      )
-
     }
 
-    // axios.post('http://localhost:9000/api/createuser', data, {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${localStorage.getItem('token')}`
+    if (data.email === '') {
+      err.email = 'Email Required'
+    } else {
+      let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+      if (!emailRegex.test(data.email)) {
+        err.email = 'Email Not Valid'
+      }
+    }
+
+    if(data.password === ''){
+      err.password = 'Password Required'
+
+    }
+    // else{
+    //   let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+    //   if(!passRegex.test(data.password)){
+    //     err.password = 'Password must be greater than 8 or a Character and Number'
     //   }
     // }
-    // ).then(res => {
-    //   console.log(res.data);
-    //   if (res.data.success) {
-    //     popup(false)
-    //   }
-    // }).catch(err => {
-    //   console.log(err);
-    // })
 
-    catch (err) {
-      console.log(err);
+
+    if (data.mobile === '') {
+      err.mobile = 'Mobile No Required'
+    } else {
+      let phoneRegex = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+      if (!phoneRegex.test(data.mobile)) {
+        err.mobile = 'Nobile No Not valid'
+      }
     }
+
+    setError({ ...err })
+    return Object.keys(err).length > 0 ? false : true
+  }
+
+  const handleValidate = () => {
+    let isValid = validateFrom()
+    isValid && handleSubmit();
+  }
+
+
+ 
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault()
+  //   console.log(data);
+
+  //   axios.post('http://localhost:9000/api/users', data, {
+  //     headers: {
+  //       // 'Content-Type': 'application/json',
+  //       // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //     }
+  //   }
+  //   ).then(res => {
+  //     console.log(res, 36)
+  //     console.log(res.data);
+  //     if (res.status === 200) {
+  //       popup(false)
+  //     }
+  //   }).catch(err => {
+  //     console.log(err);
+  //   }
+  //   )
+
+  // }
+
+  const handleSubmit = (e) => {
+
+    // const formData = new FormData();
+    // formData.append('image', profileImg);
+
+    axios.post('http://localhost:9000/api/users', data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    }
+    ).then(res => {
+      console.log(res.data);
+      console.log(res, 66);
+      if (res.status === 200) {
+        popup(false)
+      }
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
   return (
@@ -91,77 +151,25 @@ const CreateUser = ({ popup }) => {
 
           <form>
             <div>
+              <input value={data.name} onChange={handleData} type="text" name='' id='name' placeholder='Enter User Name ' className='h-12 w-full rounded-md px-3 bg-transparent shadow-sm border-b-2 border-b-blue-500 rounded-bl-md rounded-br-md focus:border-b-2 focus:border-b-yellow-700 outline-none' />
+              <p className='text-red-600 text-sm'>{error.name}</p>
 
-              <input value={data.name} onChange={handleData} type="text" name='' id='name' placeholder='Enter User Name ' className='h-12 w-full rounded-md px-3 bg-transparent shadow-sm mb-4 border-b-2 border-b-blue-500 rounded-bl-md rounded-br-md' />
+              <input value={data.email} onChange={handleData} type="email" name='' id='email' placeholder='Enter User Email' className='h-12 w-full rounded-md  px-3 bg-transparent shadow-sm mt-4 border-b-2 border-b-blue-500 rounded-bl-md rounded-br-md focus:border-b-2 focus:border-b-yellow-700 outline-none' />
+              <p className='text-red-600 text-sm'>{error.email}</p>
 
+              <input value={data.password} onChange={handleData} type="password" name='' id='password' placeholder='Enter User Password' className='h-12 w-full rounded-md px-3 bg-transparent shadow-sm mt-4 border-b-2 border-b-blue-500 rounded-bl-md rounded-br-md focus:border-b-2 focus:border-b-yellow-700 outline-none' />
+              <p className='text-red-600 text-sm'>{error.password}</p>
 
-              <label htmlFor="password" className='text-lg'>Password</label>
-              <input value={data.password} onChange={handleData} type="password" name='' id='password' placeholder='Enter your password here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
+              <input value={data.mobile} onChange={handleData} type="number" name='' id='mobile' placeholder='Enter User Mobile No' className='h-12 w-full rounded-md px-3 bg-transparent shadow-sm mt-4 border-b-2 border-b-blue-500 rounded-bl-md rounded-br-md focus:border-b-2 focus:border-b-yellow-700 outline-none' />
+              <p className='text-red-600 text-sm'>{error.mobile}</p>
 
-              <label htmlFor="mobile" className='text-l'>Mobile no.</label>
-              <input value={data.mobile} onChange={handleData} type="number" name='' id='mobile' placeholder='Enter your mobile no here' className='h-12 w-full rounded-md border border-slate-300 px-3 bg-transparent outline-blue-400 shadow-sm mb-4' />
-
-
-              <input value={data.email} onChange={handleData} type="email" name='' id='email' placeholder='Enter User Email' className='h-12 w-full rounded-md  px-3 bg-transparent shadow-sm mb-4 border-b-2 border-b-blue-500 rounded-bl-md rounded-br-md' />
-
-
-
-              <input value={data.password} onChange={handleData} type="password" name='' id='password' placeholder='Enter User Password' className='h-12 w-full rounded-md px-3 bg-transparent shadow-sm mb-4 border-b-2 border-b-blue-500 rounded-bl-md rounded-br-md' />
-
-
-              <input value={data.mobile} onChange={handleData} type="number" name='' id='mobile' placeholder='Enter User Mobile No' className='h-12 w-full rounded-md px-3 bg-transparent shadow-sm mb-4 border-b-2 border-b-blue-500 rounded-bl-md rounded-br-md' />
-
-              <div className='flex flex-row justify-between gap-y-4'>
-                <input value={profileImg} onChange={handleImage} type="file" className='text-xs text-grey-500 file:mr-5 file:px-4 file:py-2 file:rounded-full file:border-0 file:text-md file:font-semibold file:text-white file:bg-gradient-to-r file:bg-blue-400 hover:file:cursor-pointer hover:file:opacity-80' />
-
-                <p className='text-sm'> Upload image</p>
+              <div className='flex flex-col justify-between gap-y-4 mt-4'>
+                <input value={profileImg} onChange={handleImage} type="file" name='image' className='text-xs text-grey-500 file:mr-5 file:px-4 file:py-2 file:rounded-full file:border-0 file:text-md file:font-semibold file:text-white file:bg-gradient-to-r file:bg-blue-400 hover:file:cursor-pointer hover:file:opacity-80 ' />
+                <p className='text-sm'> Please choose your Profile Pic</p>
               </div>
 
-              {/* <input value={profileImg} onChange={(e) => setProfileImg(e.target.value)} type="file" id="file" className='hidden' />
-              <label for="file" className='flex justify-between items-center'>
-                <span className="file w-32"><img src="src/assets/upload_image.png" alt="Image" /></span>
-                <span >Upload an Image</span>
-              </label> */}
+              <button onClick={() => handleValidate()} type='button' className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create</button>
 
-
-              {/* <div class="flex items-center justify-center w-full">
-                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                  <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                  </div>
-                  <input id="dropzone-file" type="file" class="hidden" />
-                </label>
-              </div> */}
-
-
-              {/* <div className='flex text-sm justify-between'>
-                <input value={image} onChange={(e) => setImage(e.target.value)} type="file" className='text-sm relative left-0 z-10 opacity-0 w-full h-full cursor-pointer' /> 
-
-                <div className='relative right-24  inset-0 w-full h-full flex '>
-                  <div className='absolute'>
-                    <img src="/src/assets/upload_image.png" alt="" />
-                  </div>
-                </div>
-
-                <span>upload image</span>
-              </div> */}
-
-              {/* <div class="relative group w-full h-10 flex justify-between pr-[100px]">
-                <input value={image} onChange={(e) => setImage(e.target.value)} type="file" className="relative z-10 opacity-0 h-full w-full cursor-pointer" />
-                <div class="absolute top-0 right-0 bottom-0 left-0 w-full h-full m-auto flex items-center justify-center">
-                <div class="flex flex-row justify-between absolute top-0 left-0  bottom-0 w-full h-full m-auto items-center ">
-                  <img src="/src/assets/upload_image.png" class="sm:w-10 w-10 m-auto" alt="upload image" />
-                  <p class="text-gray-700 text-lg">Upload Image</p>
-                </div>
-                </div>
-              </div> */}
-
-
-              <button onClick={() => handleSubmit()} type='button' className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create</button>
-
-           //   <button onClick={() => handleSubmit()} type='submit' className='w-full px-6 py-2 mt-10 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create</button>
 
 
               {/* <Link to='/login'>Login</Link> */}

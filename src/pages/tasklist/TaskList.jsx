@@ -17,7 +17,7 @@ const TaskList = () => {
         );
         setTasks(updatedTasks);
 
-        console.log(`Task ${taskId} status changed to ${newStatus}.`)
+        // console.log(`Task ${taskId} status changed to ${newStatus}.`)
 
 
         try {
@@ -30,7 +30,7 @@ const TaskList = () => {
                 }
 
             ).then((response) => {
-                console.log(response);
+                // console.log(response);
                 setTaskReload(!taskReload);
             })
         } catch (error) {
@@ -49,12 +49,18 @@ const TaskList = () => {
 
     };
 
+    const handlePopup = () => {
+        setPopup(true)
+    }
+
+    console.log(taskReload);
+
     useEffect(() => {
         // i need to get tasks by user id
         axios.get('http://localhost:9000/api/tasks')
             .then((response) => {
                 setTasks(response.data);
-                console.log(response.data)
+                // console.log(response.data)
             })
             .catch((error) => {
                 console.error(error);
@@ -64,9 +70,7 @@ const TaskList = () => {
 
 
 
-    const handlePopup = () => {
-        setPopup(true)
-    }
+    
 
     return (
         <div className="w-[1200px] overflow-x-auto">
@@ -77,10 +81,10 @@ const TaskList = () => {
                     <input type="text" placeholder='Search...' className='w-24 outline-slate-400 rounded-md px-3 py-1  focus:outline-2 focus:outline-blue-500 focus:w-full' />
                 </div>
                 <div>
-                    <button onClick={() => setPopup(true)} className="bg-blue-200 px-3 py-1 shadow-md rounded-md">Add Task</button>
+                    <button onClick={handlePopup} className="bg-blue-200 px-3 py-1 shadow-md rounded-md">Add Task</button>
                 </div>
             </div>
-            <div className="grid grid-cols-3 w-full h-[85vh] px-16 gap-12  py-6 ">
+            <div className=" grid grid-cols-3 w-[1200px] h-[85vh] overflow-x-auto px-16 gap-12  py-6 ">
                 <TaskContainer tasks={tasks} status="TODO" handleTaskUpdate={handleTaskUpdate} />
                 <TaskContainer tasks={tasks} status="INPROGRESS" handleTaskUpdate={handleTaskUpdate} />
                 <TaskContainer tasks={tasks} status="DONE" handleTaskUpdate={handleTaskUpdate} />

@@ -31,14 +31,14 @@ const TaskContainer = ({ tasks, status, handleTaskUpdate }) => {
     }
 
     return (
-        <div className={`${taskContainer} overflow-y-auto pb-12`} onDragOver={handleDragOver} onDrop={handleDrop}>
+        <div className={`${taskContainer} overflow-y-auto w-[330px] pb-12 section scrollbar `} onDragOver={handleDragOver} onDrop={handleDrop}>
             <h3 className="font-semibold uppercase mb-4 flex justify-center items-center gap-2 py-4 underline-offset-1 underline">{status}
                 <span>
                     {status === "TODO" ? <BsListTask /> : status === "INPROGRESS" ? <FcProcess /> : <BiTask />}
                 </span>
             </h3>
 
-            <div div className={`${taskContainer} flex flex-col gap-2`}>
+            <div className={`${taskContainer} flex flex-col gap-2`}>
                 {
                     tasks
                         .filter((task) => task.status === status)
