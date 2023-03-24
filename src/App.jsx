@@ -20,7 +20,7 @@ function App() {
     <Layout>
       {(!role) &&
         <Routes>
-          <Route path='/login' element={<Auth />} />
+          <Route path='/' element={<Auth />} />
         </Routes>
       }
 
@@ -39,7 +39,9 @@ function App() {
           <Route path='/tasks' element={<TaskList />} />
           <Route path='/users' element={<UserList />} />
           <Route path='/createtask' element={<CreateTask />} />
+
           <Route path='/task/:id' element={<TaskDetails />} />
+
         </Routes>
       }
     </Layout>

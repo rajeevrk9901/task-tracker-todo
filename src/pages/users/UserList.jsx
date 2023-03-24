@@ -1,4 +1,6 @@
+
 import React, { useEffect, useState } from 'react'
+
 import CreateUser from './CreateUser'
 import axios from 'axios'
 
@@ -7,7 +9,10 @@ import { FcProcess } from 'react-icons/fc'
 import { BiTask } from 'react-icons/bi'
 
 
+
 const UserList = () => {
+  const [data, setData] = useState([]);
+
   const [popup, setPopup] = useState(false)
   const [users, setUsers] = useState([])
 
@@ -38,19 +43,41 @@ const UserList = () => {
   }, [])
 
 
+  // opup the create user form
   const handlePopup = () => {
     setPopup(true)
   }
+
+
+  // fetching data from api
+  useEffect(() => {
+    console.log(data);
+
+    axios.get('http://localhost:9000', {
+      // headers: {
+      //   "Authorization": `Bearer ${token}`
+      // }
+    })
+      .then((res) => {
+        console.log(res, 29);
+        setData([res.data]);
+      })
+      .catch((err) => {
+        console.log(err, 32)
+      })
+
+  }, [])
+
   return (
     <div className='flex flex-col h-[85vh] w-full gap-10 '>
 
       {popup && <CreateUser popup={setPopup} />}
-      <div className='flex md:flex-row flex-col justify-between gap-5 px-16 py-8'>
+      <div className='flex flex-row justify-between gap-5 md:px-16 px-5 py-8'>
         <div>
           <input type="text" placeholder='Search...' className='outline outline-slate-400 rounded-md px-3 py-2  focus:outline-2 focus:outline-blue-500' />
         </div>
 
-        <button type='button' onClick={handlePopup} className=' w-fit px-6 py-2 rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Create User</button>
+        <button type='button' onClick={handlePopup} className=' w-fit md:px-6 px-3 md:py-2 py-1 rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold md:text-xl text-base hover:duration-500 hover:scale-95'>Create User</button>
       </div>
 
       {/* userlist */}
@@ -79,6 +106,7 @@ const UserList = () => {
             ))}
           </div>
         ))}
+
       </div>
     </div>
   )
