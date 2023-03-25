@@ -11,7 +11,6 @@ import { BiTask } from 'react-icons/bi'
 
 
 const UserList = () => {
-  const [data, setData] = useState([]);
 
   const [popup, setPopup] = useState(false)
   const [users, setUsers] = useState([])
@@ -19,6 +18,11 @@ const UserList = () => {
   const [stat, setStat] = useState([])
 
   console.log(users)
+
+  // popup the create user form
+  const handlePopup = () => {
+    setPopup(true)
+  }
 
   useEffect(() => {
     axios.get('http://localhost:9000/api/users')
@@ -28,7 +32,7 @@ const UserList = () => {
       .catch((error) => {
         console.error(error)
       })
-  }, [])
+  }, [popup])
 
 
   // http://192.168.0.169:9000/api/status
@@ -40,33 +44,12 @@ const UserList = () => {
       .catch((error) => {
         console.error(error)
       })
-  }, [])
+  }, [popup])
 
 
-  // opup the create user form
-  const handlePopup = () => {
-    setPopup(true)
-  }
 
 
-  // fetching data from api
-  useEffect(() => {
-    console.log(data);
 
-    axios.get('http://localhost:9000', {
-      // headers: {
-      //   "Authorization": `Bearer ${token}`
-      // }
-    })
-      .then((res) => {
-        console.log(res, 29);
-        setData([res.data]);
-      })
-      .catch((err) => {
-        console.log(err, 32)
-      })
-
-  }, [])
 
   return (
     <div className='flex flex-col h-[85vh] w-full gap-10 '>
@@ -85,7 +68,7 @@ const UserList = () => {
         {users.map((user) => (
           <div className='flex flex-col gap-6 bg-gray-300 shadow-2xl p-5 rounded-lg gap-y-5 min-w-[320px] max-w-[350px]' key={user.id}>
             <div className='flex flex-row gap-x-5'>
-              <img src="/src/assets/cb.jpg" alt="User Image" className='w-20 h-20 rounded-full border-2' />
+              <img src={user.profileImg} alt="User Image" className='w-20 h-20 rounded-full border-2' />
               <div className='flex flex-col gap-y-2'>
                 <h1 className='text-xl font-bold text-blue-900'>{user.name}</h1>
                 <p>{user.email}</p>

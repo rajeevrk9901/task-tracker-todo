@@ -90,7 +90,7 @@ const CreateUser = ({ popup }) => {
   }
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
 
     let vals = new FormData();
     vals.append("user", JSON.stringify(data));
@@ -100,27 +100,29 @@ const CreateUser = ({ popup }) => {
 
     // const formData = new FormData();
     // formData.append('image', profileImg);
-
-    axios.post('http://localhost:9000/api/users', vals, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    try {
+      await axios.post('http://localhost:9000/api/users', vals, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
       }
-    }
-    ).then(res => {
-      console.log(res.data);
-      console.log(res, 66);
-      if (res.status === 200) {
+      ).then(res => {
+        console.log(res.data);
+        console.log(res, 66);
+        if (res.status === 200) {
 
-        setMessage("User Created Successfully!");
-        setShowToast(true)
-        popup(false)
-      }
-    }).catch(err => {
-      // console.log(err);
-      setMessage("Server Error : User Not Created!");
+          setMessage("User Created Successfully!");
+          setShowToast(true)
+          popup(false)
+        }
+      })
+    } catch (error) {
+
+      setMessage("Something Went Wrong!");
       setShowToast(true)
-    })
+      console.log(error);
+    }
   }
 
 
