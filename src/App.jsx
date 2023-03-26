@@ -21,11 +21,13 @@ function App() {
       {(!role) &&
         <Routes>
           <Route path='/' element={<Auth />} />
+          <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       }
 
       {(role === "USER") &&
         <Routes>
+          <Route path="/" element={<Navigate replace to="/tasks" />} />
           <Route path='/tasks' element={<TaskList />} />
           <Route path='/createtask' element={<CreateTask />} />
           <Route path='/task/:id' element={<TaskDetails />} />
@@ -36,6 +38,7 @@ function App() {
 
       {(role === "ADMIN") &&
         <Routes>
+          <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path='/tasks' element={<TaskList />} />
           <Route path='/users' element={<UserList />} />
           <Route path='/createtask' element={<CreateTask />} />
