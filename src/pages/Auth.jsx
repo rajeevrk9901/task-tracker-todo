@@ -67,10 +67,10 @@ const Auth = () => {
 
         // console.log(res.data);
         if (res.data.success) {
-
+          setRole(res.data.role)
           localStorage.setItem("role", res.data.role)
           localStorage.setItem("token", res.data.token)
-          setRole(res.data.role)
+          localStorage.setItem("name", res.data.name)
           navigate("/tasks")
         }
 
