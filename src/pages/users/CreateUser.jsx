@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 // import { Link } from 'react-router-dom'
 import Toast from '../../components/toast/Toast'
+import api from '../../utils/ApiServices'
 
 const CreateUser = ({ popup }) => {
 
@@ -27,15 +28,15 @@ const CreateUser = ({ popup }) => {
     const newData = { ...data }
     newData[e.target.id] = e.target.value;
     setData(newData)
-    console.log(newData);
+    // console.log(newData);
   }
 
-  const handleImage = (e) => {
-    setProfileImg(e.target.files[0])
+  // const handleImage = (e) => {
+  //   setProfileImg(e.target.files[0])
 
-    console.log(e.target.files[0]);
-    // setProfileImg({ profileImg: e.target.files[0] });
-  }
+  //   // console.log(e.target.files[0]);
+  //   // setProfileImg({ profileImg: e.target.files[0] });
+  // }
 
   // vallidation
   const validateFrom = () => {
@@ -90,37 +91,40 @@ const CreateUser = ({ popup }) => {
   }
 
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
 
     let vals = new FormData();
     vals.append("user", JSON.stringify(data));
     vals.append("profileImg", profileImg);
 
-    console.log(vals, 97)
 
-    // const formData = new FormData();
-    // formData.append('image', profileImg);
+    let headers = {};
 
-    axios.post('http://localhost:9000/api/users', vals, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
+    if (vals instanceof FormData) {
+      headers['Content-Type'] = 'multipart/form-data';
+    } else {
+      headers['Content-Type'] = 'application/json';
     }
-    ).then(res => {
-      console.log(res.data);
-      console.log(res, 66);
-      if (res.status === 200) {
 
-        setMessage("User Created Successfully!");
-        setShowToast(true)
-        popup(false)
-      }
-    }).catch(err => {
-      // console.log(err);
-      setMessage("Server Error : User Not Created!");
+    try {
+      await api.post('users', vals, { headers })
+        .then(res => {
+          // console.log(res.data);
+          // console.log(res, 66);
+          if (res.status === 200) {
+
+            setMessage("User Created Successfully!");
+            setShowToast(true)
+            popup(false)
+          }
+        })
+    } catch (error) {
+
+      setMessage("Something Went Wrong!");
       setShowToast(true)
-    })
+      console.log(error);
+    }
   }
 
 

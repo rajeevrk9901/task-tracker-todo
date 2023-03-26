@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import axios from 'axios'
 import Toast from '../../components/toast/Toast'
+import api from '../../utils/ApiServices'
 
 const CreateTask = ({ popup, setPopup }) => {
 
@@ -21,7 +22,7 @@ const CreateTask = ({ popup, setPopup }) => {
   // console.log(users)
 
   useEffect(() => {
-    axios.get('http://localhost:9000/api/users')
+    api.get('users')
       .then((res) => {
         setUsers(res.data)
       })
@@ -34,7 +35,7 @@ const CreateTask = ({ popup, setPopup }) => {
     const newTask = { ...task }
     newTask[e.target.id] = e.target.value;
     setTask(newTask)
-    console.log(newTask);
+    // console.log(newTask);
   }
 
   const handleToastClose = () => {
@@ -44,21 +45,15 @@ const CreateTask = ({ popup, setPopup }) => {
   const handleSubmit = (e) => {
 
     try {
-      axios.post(`http://localhost:9000/api/${role === "USER" ? "tasks" : "admin/task"} `, task,
-        {
-          headers: {
-            application: 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+      api.post(`${role === "USER" ? "tasks" : "admin/task"} `, task)
+        .then((res) => {
+          // console.log(res, "create task response");
+          setMessage("Task Created !")
+          setShowToast(true)
+          if (res.status === 200) {
+            popup(false)
           }
-        }
-      ).then((res) => {
-        console.log(res, "create task response");
-        setMessage("Task Created !")
-        setShowToast(true)
-        if (res.status === 200) {
-          popup(false)
-        }
-      })
+        })
     }
     catch (error) {
       setMessage("Server Error : Task Not Created !")
@@ -74,20 +69,20 @@ const CreateTask = ({ popup, setPopup }) => {
       <div onClick={() => popup(false)} className='h-full top-0 left-0 w-full absolute opacity-40 z-10 bg-black'></div>
 
       {showToast && <Toast message={message} onClose={handleToastClose} />}
-      
+
 
       <div className='absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 shadow-2xl'>
-      <div className='bg-slate-50 p-6 rounded-lg flex-row shodow-md shadow-slate-300 min-w-[350px] max-w-[400px] border-2 border-slate-200'>
-        <buton onClick={() => popup(false)} className='flex justify-end shadow-2xl'>
+        <div className='bg-slate-50 p-6 rounded-lg flex-row shodow-md shadow-slate-300 min-w-[350px] max-w-[400px] border-2 border-slate-200'>
+          <buton onClick={() => popup(false)} className='flex justify-end shadow-2xl'>
 
-          <div className='cursor-pointer relative pr-3 w-6 h-4'>
-            <div className='absolute bg-red-600  w-6 h-1 rotate-45'></div>
-            <div className='absolute bg-red-600  w-6 h-1 -rotate-45'></div>
-          </div>
+            <div className='cursor-pointer relative pr-3 w-6 h-4'>
+              <div className='absolute bg-red-600  w-6 h-1 rotate-45'></div>
+              <div className='absolute bg-red-600  w-6 h-1 -rotate-45'></div>
+            </div>
 
-        </buton>
+          </buton>
 
-        
+
 
           <h2 className='uppercase font-bold text-2xl flex mb-6 text-slate-700 border-b-2 border-b-orange-400 w-fit'>Add Task</h2>
           <form>
@@ -97,8 +92,8 @@ const CreateTask = ({ popup, setPopup }) => {
               {/* <p className='text-red-600 text-sm'>{error.email}</p> */}
 
               <div className='mt-5'>
-              <label htmlFor="description" className='text-lg '>Description</label>
-              <textarea value={task.description} onChange={handleData} rows="3" cols="50" id="description" name="description" type="text" placeholder='Enter Task Description' className=' w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none' />
+                <label htmlFor="description" className='text-lg '>Description</label>
+                <textarea value={task.description} onChange={handleData} rows="3" cols="50" id="description" name="description" type="text" placeholder='Enter Task Description' className=' w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none' />
               </div>
 
               {role === 'ADMIN' &&

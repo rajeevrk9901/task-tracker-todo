@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import CreateTask from "./CreateTask";
 import Toast from "../../components/toast/Toast";
+import api from "../../utils/ApiServices";
 
 
 const TaskList = () => {
@@ -17,7 +18,27 @@ const TaskList = () => {
     const [toast, setToast] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
 
+    const [search, setSearch] = useState('')
+    const [searchResult, setSearchResult] = useState([])
 
+
+
+    // const mySearchItem = tasks.filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
+
+
+    // NOTE  using debouncing for search
+
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            const filteredTasks = tasks.filter((task) =>
+                task.title.toLowerCase().includes(search.toLowerCase())
+            );
+
+            setSearchResult(filteredTasks)
+        }, 1000);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [search, tasks]);
 
     const handleTaskUpdate = async (taskId, newStatus) => {
         // console.log(taskId, newStatus, 25)
@@ -29,22 +50,11 @@ const TaskList = () => {
 
         // console.log(`Task ${taskId} status changed to ${newStatus}.`)
 
-
-
-
         try {
-            const res = await axios.put(`http://localhost:9000/api/tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus },
-                {
-                    headers: {
-                        // 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                        // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-                        application: 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                }
+            const res = await api.put(`tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus }
 
             ).then((res) => {
-                console.log(res, "create task response");
+                // console.log(res, "create task response");
 
                 if (res.status === 200) {
                     console.log("updated")
@@ -77,17 +87,26 @@ const TaskList = () => {
 
 
     useEffect(() => {
-        // i need to get tasks by user id
-        axios.get('http://localhost:9000/api/tasks')
-            .then((response) => {
-                setTasks(response.data);
-                // console.log(response.data)
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, [taskReload, popup]);
 
+        try {
+            api.get(`tasks`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            }).then((response) => {
+                console.log(response, "response");
+                setTasks(response.data);
+            });
+
+        } catch (error) {
+            setToastMessage(error.response.data.message)
+            setToast(true)
+            console.error(error);
+        }
+
+
+
+    }, [taskReload, popup]);
 
 
     const handleToastClose = () => {
@@ -95,23 +114,33 @@ const TaskList = () => {
     };
 
 
-    return (
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value)
+        console.log(e.target.value)
+    }
+
+
+
+
+
+    return tasks.length === 0 ? <h1>Shimmer ....</h1> : (
         <div className="w-[1200px] overflow-x-auto">
             {toast && <Toast message={toastMessage} onClose={handleToastClose} />}
             {popup && <CreateTask popup={setPopup} />}
 
-            <div className='flex md:flex-row flex-col gap-5 absolute'>
+            <div className='flex md:flex-row flex-col gap-5 absolute md:left-44 right-0'>
                 <div>
-                    <input type="text" placeholder='Search...' className='w-24 outline-slate-400 rounded-md px-3 py-1  focus:outline-2 focus:outline-blue-500 focus:w-full' />
+                    <input onChange={handleSearch} value={search} type="text" placeholder='Search...' className='w-24 outline-slate-400 rounded-md px-3 py-1  focus:outline-2 focus:outline-blue-500 focus:w-full' />
                 </div>
                 <div>
                     <button onClick={handlePopup} className="bg-blue-200 px-3 py-1 shadow-md rounded-md">Add Task</button>
                 </div>
             </div>
             <div className=" grid grid-cols-3 w-[1200px] h-[85vh] overflow-x-auto px-16 gap-12  py-6 ">
-                <TaskContainer tasks={tasks} status="TODO" handleTaskUpdate={handleTaskUpdate} />
-                <TaskContainer tasks={tasks} status="INPROGRESS" handleTaskUpdate={handleTaskUpdate} />
-                <TaskContainer tasks={tasks} status="DONE" handleTaskUpdate={handleTaskUpdate} />
+                <TaskContainer tasks={searchResult} status="TODO" handleTaskUpdate={handleTaskUpdate} />
+                <TaskContainer tasks={searchResult} status="INPROGRESS" handleTaskUpdate={handleTaskUpdate} />
+                <TaskContainer tasks={searchResult} status="DONE" handleTaskUpdate={handleTaskUpdate} />
             </div>
         </div>
     );

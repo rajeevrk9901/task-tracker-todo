@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 const Task = ({ task, handleTaskUpdate }) => {
     const [isDragging, setIsDragging] = useState(false);
 
+    const name = localStorage.getItem("name");
+    console.log(name, 8)
+
+
     const handleDragStart = (e) => {
         e.dataTransfer.setData("text/plain", task._id);
         setIsDragging(true);
@@ -42,7 +46,7 @@ const Task = ({ task, handleTaskUpdate }) => {
 
     return (
         <div
-            className={`${taskItem} ${isDraggingClass} mx-4 justify-between items-center px-4 py-2 flex gap-4 bg-red-200 cursor-grab shadow-md rounded-md`}
+            className={`${taskItem} ${isDraggingClass} mx-4 justify-between items-center px-4 py-2 flex gap-4 bg-red-200 cursor-grab shadow-md rounded-md relative ${name === task.user?.name ? "bg-yellow-100" : " "}`}
             draggable={!isDragging}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
@@ -53,16 +57,17 @@ const Task = ({ task, handleTaskUpdate }) => {
                 ))} */}
 
             </Link>
-            <div key={task.user?._id} className="font-sans text-xs text-blue-700">{task.user?.name}</div>
+            {name === task.user?.name ? <div className="font-sans text-green-500 absolute -top-3 -left-1 text-4xl">*</div> : " "}
+            <div key={task.user?._id} className={`font-sans text-xs text-blue-700 ${name === task.user?.name ? "text-green-700" : " "}`}>{task.user?.name}</div>
 
             <div>
-            <button className="cursor-pointer lowercase bg-yellow-300 px-2 py-[1px]" onClick={handleMoveTask}>
-                {task.status === "TODO"
-                    ? "Start"
-                    : task.status === "INPROGRESS"
-                        ? "Finish"
-                        : "Reset"}
-            </button>
+                <button className="cursor-pointer lowercase bg-yellow-300 px-2 py-[1px]" onClick={handleMoveTask}>
+                    {task.status === "TODO"
+                        ? "Start"
+                        : task.status === "INPROGRESS"
+                            ? "Finish"
+                            : "Reset"}
+                </button>
             </div>
         </div>
     );

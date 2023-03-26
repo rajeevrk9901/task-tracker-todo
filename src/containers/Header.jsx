@@ -17,7 +17,7 @@ const Header = () => {
 
     // changing active links
     const navLinkStyles = ({ isActive }) => {
-        return{
+        return {
             fontWeight: isActive ? "Bold" : "normal",
             borderBottom: isActive ? "2px solid green" : "",
             color: isActive ? "#999" : ""
@@ -29,7 +29,7 @@ const Header = () => {
         <header className='h-[10vh] sticky top-0 shadow-2xl md:px-16 px-5 py-3 bg-gray-700 flex flex-row justify-between'>
             <nav className=''>
                 <ul className=' flex md:gap-x-10 gap-x-5 items-center'>
-                    <img src="/src/assets/logo.png" alt="Logo" className='w-12 cursor-pointer' />
+                    <img src="https://res.cloudinary.com/dhdmdlywv/image/upload/v1679811619/task-tracker/assets/logo_iaiksc.png" alt="Logo" className='w-12 cursor-pointer' />
 
                     {role && <NavLink to="/tasks" className='font-semibold text-lg text-white hover:text-blue-400' style={navLinkStyles}>Tasks</NavLink>}
 
