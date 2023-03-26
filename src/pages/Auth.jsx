@@ -59,10 +59,10 @@ const Auth = () => {
     isValid && handleSubmit();
   }
 
-  const handleSubmit = (e) => {
-    // e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     // console.log(data);
-    api.post("login", data)
+    await api.post("login", data)
       .then(res => {
 
         // console.log(res.data);
@@ -75,7 +75,7 @@ const Auth = () => {
         }
 
       }).catch(err => {
-        setMessage("Server Error: Login Not Successfull")
+        setMessage(err)
         setShowToast(true)
         console.log(err);
       })
@@ -95,7 +95,7 @@ const Auth = () => {
       <div className='flex md:flex-row flex-col-reverse justify-center'>
         <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 md:w-[400px] w-[100%] border-2 border-slate-200'>
           <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Login</h2>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div>
               <div className='mt-2'>
                 <label htmlFor="email" className='text-lg'>Email</label>
@@ -109,7 +109,7 @@ const Auth = () => {
                 <p className='text-red-600 text-sm'>{error.password}</p>
               </div>
 
-              <button type='button' onClick={() => handleValidate()} className='w-full px-6 py-2 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button>
+              <button type='submit' onClick={() => handleValidate()} className='w-full px-6 py-2 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button>
             </div>
           </form>
         </div>

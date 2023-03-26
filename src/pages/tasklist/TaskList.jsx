@@ -87,19 +87,19 @@ const TaskList = () => {
 
 
     useEffect(() => {
-        // i need to get tasks by user id
-        api.get('tasks'
-
-        )
-            .then((response) => {
+        const fetchData = async () => {
+            try {
+                const response = await api.get(`tasks`);
                 setTasks(response.data);
-                // console.log(response.data)
-            })
-            .catch((error) => {
+            } catch (error) {
+                setToastMessage(error.response.data.message)
+                setToast(true)
                 console.error(error);
-            });
-    }, [taskReload, popup]);
+            }
+        };
 
+        fetchData();
+    }, [taskReload, popup]);
 
 
     const handleToastClose = () => {
@@ -109,7 +109,6 @@ const TaskList = () => {
 
 
     const handleSearch = (e) => {
-
         setSearch(e.target.value)
         console.log(e.target.value)
     }
@@ -118,7 +117,7 @@ const TaskList = () => {
 
 
 
-    return (
+    return tasks.length === 0 ? <h1>Shimmer ....</h1> : (
         <div className="w-[1200px] overflow-x-auto">
             {toast && <Toast message={toastMessage} onClose={handleToastClose} />}
             {popup && <CreateTask popup={setPopup} />}
