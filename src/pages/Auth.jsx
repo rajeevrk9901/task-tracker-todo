@@ -115,7 +115,7 @@ const Auth = () => {
         </div>
 
         <div className='flex md:flex-col flex-row items-center justify-between md:gap-y-5 bg-blue-100 md:p-16 p-5'>
-          <img src="src/assets/tasktracker.svg" alt="" className='md:w-48 w-20 mix-blend-multiply' />
+          <img src="https://res.cloudinary.com/dhdmdlywv/image/upload/v1679811784/task-tracker/assets/tasktracker_irnqge.svg" alt="" className='md:w-48 w-20 mix-blend-multiply' />
           <h2 className='text-2xl font-bold text-blue-600'>Task Tracker</h2>
           {/* <h3 className='text-xl font-semibold'>Developed by <Link to="https://codebucketlab.com/">Code Bucket Solution Pvt Ltd</Link></h3> */}
         </div>

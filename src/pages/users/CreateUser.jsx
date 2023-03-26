@@ -106,10 +106,7 @@ const CreateUser = ({ popup }) => {
     } else {
       headers['Content-Type'] = 'application/json';
     }
-    // console.log(vals, 97)
 
-    // const formData = new FormData();
-    // formData.append('image', profileImg);
     try {
       await api.post('users', vals, { headers })
         .then(res => {

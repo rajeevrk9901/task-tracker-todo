@@ -76,19 +76,27 @@ const UserList = () => {
               </div>
             </div>
 
-            {stat.filter((st) => st.user === user.name).map((filteredStat) => (
-              <div className='flex flex-row gap-y-3 w-12 gap-x-5' key={filteredStat.id}>
-                <div className='flex flex-col justify-between items-center gap-y-2'>
-                  <BsListTask className='text-red-600' /> <span>{filteredStat.todoCount}</span>
+            <div className='flex'>
+
+              {stat.filter((st) => st.user === user.name).map((filteredStat) => (
+                <div className='flex flex-row gap-y-3 gap-x-5 w-1/2' key={filteredStat.id}>
+                  <div className='flex flex-col justify-between items-center gap-y-2'>
+                    <BsListTask className='text-red-600' /> <span>{filteredStat.todoCount}</span>
+                  </div>
+                  <div className='flex flex-col justify-between items-center gap-y-2'>
+                    <FcProcess className='text-green-600' /> <span>{filteredStat.inprogressCount}</span>
+                  </div>
+                  <div className='flex flex-col justify-between items-center gap-y-2'>
+                    <BiTask className='text-blue-600' /> <span>{filteredStat.doneCount}</span>
+                  </div>
                 </div>
-                <div className='flex flex-col justify-between items-center gap-y-2'>
-                  <FcProcess className='text-green-600' /> <span>{filteredStat.inprogressCount}</span>
-                </div>
-                <div className='flex flex-col justify-between items-center gap-y-2'>
-                  <BiTask className='text-blue-600' /> <span>{filteredStat.doneCount}</span>
-                </div>
+              ))}
+
+              <div>
+                {user.role === 'ADMIN' && <button type='button' className='w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-gray-100 font-bold py-2 px-4 rounded-md hover:duration-500 hover:scale-95'>{user.role}</button>}
               </div>
-            ))}
+            </div>
+            {/*  : <button type='button' className='w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-gray-100 font-bold py-2 rounded-md hover:duration-500 hover:scale-95'>View</button> */}
           </div>
         ))}
 
