@@ -87,18 +87,25 @@ const TaskList = () => {
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await api.get(`tasks`);
-                setTasks(response.data);
-            } catch (error) {
-                setToastMessage(error.response.data.message)
-                setToast(true)
-                console.error(error);
-            }
-        };
 
-        fetchData();
+        try {
+            api.get(`tasks`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            }).then((response) => {
+                console.log(response, "response");
+                setTasks(response.data);
+            });
+
+        } catch (error) {
+            setToastMessage(error.response.data.message)
+            setToast(true)
+            console.error(error);
+        }
+
+
+
     }, [taskReload, popup]);
 
 
