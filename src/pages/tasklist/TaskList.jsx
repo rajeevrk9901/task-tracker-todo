@@ -37,7 +37,7 @@ const TaskList = () => {
             const res = await api.put(`tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus }
 
             ).then((res) => {
-                console.log(res, "create task response");
+                // console.log(res, "create task response");
 
                 if (res.status === 200) {
                     console.log("updated")

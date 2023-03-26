@@ -28,15 +28,15 @@ const CreateUser = ({ popup }) => {
     const newData = { ...data }
     newData[e.target.id] = e.target.value;
     setData(newData)
-    console.log(newData);
+    // console.log(newData);
   }
 
-  const handleImage = (e) => {
-    setProfileImg(e.target.files[0])
+  // const handleImage = (e) => {
+  //   setProfileImg(e.target.files[0])
 
-    console.log(e.target.files[0]);
-    // setProfileImg({ profileImg: e.target.files[0] });
-  }
+  //   // console.log(e.target.files[0]);
+  //   // setProfileImg({ profileImg: e.target.files[0] });
+  // }
 
   // vallidation
   const validateFrom = () => {
@@ -97,15 +97,15 @@ const CreateUser = ({ popup }) => {
     vals.append("user", JSON.stringify(data));
     vals.append("profileImg", profileImg);
 
-    console.log(vals, 97)
+    // console.log(vals, 97)
 
     // const formData = new FormData();
     // formData.append('image', profileImg);
     try {
       await api.post('users', vals)
         .then(res => {
-          console.log(res.data);
-          console.log(res, 66);
+          // console.log(res.data);
+          // console.log(res, 66);
           if (res.status === 200) {
 
             setMessage("User Created Successfully!");

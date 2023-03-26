@@ -8,7 +8,7 @@ import api from '../utils/ApiServices'
 const TaskDetails = () => {
 
     const { id } = useParams()
-    console.log(id)
+    // console.log(id)
 
     const [task, setTask] = React.useState([])
     const [comment, setComment] = useState([])
@@ -47,7 +47,7 @@ const TaskDetails = () => {
         e.preventDefault()
         api.post(`tasks/${id}/comments`, { comment: commentText })
             .then((res) => {
-                console.log(res, "create task response");
+                // console.log(res, "create task response");
                 if (res.status === 200) {
                     setCommentText('')
                     setReload(!reload)

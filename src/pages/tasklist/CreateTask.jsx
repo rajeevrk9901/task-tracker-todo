@@ -35,7 +35,7 @@ const CreateTask = ({ popup, setPopup }) => {
     const newTask = { ...task }
     newTask[e.target.id] = e.target.value;
     setTask(newTask)
-    console.log(newTask);
+    // console.log(newTask);
   }
 
   const handleToastClose = () => {
@@ -47,7 +47,7 @@ const CreateTask = ({ popup, setPopup }) => {
     try {
       api.post(`${role === "USER" ? "tasks" : "admin/task"} `, task)
         .then((res) => {
-          console.log(res, "create task response");
+          // console.log(res, "create task response");
           setMessage("Task Created !")
           setShowToast(true)
           if (res.status === 200) {

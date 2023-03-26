@@ -61,11 +61,11 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     // e.preventDefault();
-    console.log(data);
+    // console.log(data);
     api.post("login", data)
       .then(res => {
 
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.success) {
 
           navigate("/tasks")

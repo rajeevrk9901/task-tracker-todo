@@ -17,7 +17,7 @@ const UserList = () => {
 
   const [stat, setStat] = useState([])
 
-  console.log(users)
+  // console.log(users)
 
   // popup the create user form
   const handlePopup = () => {
