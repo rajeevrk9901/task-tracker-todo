@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import api from '../utils/ApiServices'
+import { format } from 'date-fns'
 
 
 
@@ -33,6 +34,7 @@ const TaskDetails = () => {
         api.get(`tasks/${id}/comments`)
             .then((res) => {
                 setComment(res.data)
+                console.log(res.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -82,8 +84,13 @@ const TaskDetails = () => {
 
                 <div className='h-60 overflow-y-auto scrollbar my-2'>
                     {comment.map((com) => (
-                        <div className='flex flex-col gap-2 border-b-2 border-b-gray-300 my-2 shadow-md'>
-                            <h1 className='text-blue-500 text-xl font-semibold'> {com.user.name}</h1>
+                        <div className='flex flex-col justify-center gap-2 border-b-2 border-b-gray-300 my-2 shadow-md'>
+                            <div className='flex flex-row gap-2 items-center'>
+                                <img className='w-8 h-8 rounded-full' src={com.user?.profileImg} alt="" />
+                                <h1 className='text-blue-500 text-xl font-semibold'> {com.user?.name}</h1>
+                                <p className='text-gray-500 text-sm'>{com?.createdAt && format(new Date(com?.createdAt), 'dd MMM yyyy hh:mm')}</p>
+                            </div>
+
                             <p className='pl-3 py-1'>{com.comment}</p>
                         </div>
 

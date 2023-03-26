@@ -3,11 +3,13 @@ import axios from "axios";
 
 
 const api = axios.create({
-    baseURL: 'https://task-tracker-zzuz.onrender.com/api/',
+    baseURL: 'http://localhost:9000/api/',
     headers: {
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
 });
+
+
 
 export default api;

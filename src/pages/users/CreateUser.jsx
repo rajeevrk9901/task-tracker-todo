@@ -91,18 +91,27 @@ const CreateUser = ({ popup }) => {
   }
 
 
+
   const handleSubmit = async (e) => {
 
     let vals = new FormData();
     vals.append("user", JSON.stringify(data));
     vals.append("profileImg", profileImg);
 
+
+    let headers = {};
+
+    if (vals instanceof FormData) {
+      headers['Content-Type'] = 'multipart/form-data';
+    } else {
+      headers['Content-Type'] = 'application/json';
+    }
     // console.log(vals, 97)
 
     // const formData = new FormData();
     // formData.append('image', profileImg);
     try {
-      await api.post('users', vals)
+      await api.post('users', vals, { headers })
         .then(res => {
           // console.log(res.data);
           // console.log(res, 66);
