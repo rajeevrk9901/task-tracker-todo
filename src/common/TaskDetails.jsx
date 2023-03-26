@@ -24,6 +24,7 @@ const TaskDetails = () => {
         api.get(`tasks/${id}`)
             .then((res) => {
                 setTask(res.data)
+                console.log(res.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -64,6 +65,7 @@ const TaskDetails = () => {
                     <h1 className='text-blue-900 font-bold text-2xl'>{task.title}</h1>
                     <button className='text-xs px-2 py-1 border-2 text-green-600 font-semibold'>{task.status}</button>
                 </div>
+                {task.createdBy === "ADMIN" && <p className='text-gray-500 text-sm'>Created by {task.createdBy} on {task.createdAt && format(new Date(task.createdAt), 'dd MMM yyyy HH:mm')}</p>}
 
                 <p className='font-semibold'>{task.description}</p>
             </div>
