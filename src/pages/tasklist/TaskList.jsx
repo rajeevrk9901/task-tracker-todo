@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import CreateTask from "./CreateTask";
 import Toast from "../../components/toast/Toast";
+import api from "../../utils/ApiServices";
 
 
 const TaskList = () => {
@@ -33,15 +34,7 @@ const TaskList = () => {
 
 
         try {
-            const res = await axios.put(`http://localhost:9000/api/tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus },
-                {
-                    headers: {
-                        // 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                        // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-                        application: 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                }
+            const res = await api.put(`tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus }
 
             ).then((res) => {
                 console.log(res, "create task response");
@@ -78,7 +71,9 @@ const TaskList = () => {
 
     useEffect(() => {
         // i need to get tasks by user id
-        axios.get('http://localhost:9000/api/tasks')
+        api.get('tasks'
+
+        )
             .then((response) => {
                 setTasks(response.data);
                 // console.log(response.data)

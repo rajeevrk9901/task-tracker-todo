@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 
 import CreateUser from './CreateUser'
@@ -7,6 +6,7 @@ import axios from 'axios'
 import { BsListTask } from 'react-icons/bs'
 import { FcProcess } from 'react-icons/fc'
 import { BiTask } from 'react-icons/bi'
+import api from '../../utils/ApiServices'
 
 
 
@@ -25,7 +25,7 @@ const UserList = () => {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:9000/api/users')
+    api.get('users')
       .then((res) => {
         setUsers(res.data)
       })
@@ -37,7 +37,7 @@ const UserList = () => {
 
   // http://192.168.0.169:9000/api/status
   useEffect(() => {
-    axios.get('http://localhost:9000/api/status')
+    api.get('status')
       .then((res) => {
         setStat(res.data)
       })

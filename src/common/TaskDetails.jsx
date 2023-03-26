@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import api from '../utils/ApiServices'
 
 
 
@@ -19,7 +20,7 @@ const TaskDetails = () => {
     // console.log(task)
 
     useEffect(() => {
-        axios.get(`http://localhost:9000/api/tasks/${id}`)
+        api.get(`tasks/${id}`)
             .then((res) => {
                 setTask(res.data)
             })
@@ -29,7 +30,7 @@ const TaskDetails = () => {
     }, [])
 
     useEffect(() => {
-        axios.get(`http://localhost:9000/api/tasks/${id}/comments`)
+        api.get(`tasks/${id}/comments`)
             .then((res) => {
                 setComment(res.data)
             })
@@ -44,21 +45,14 @@ const TaskDetails = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post(`http://localhost:9000/api/tasks/${id}/comments`, { comment: commentText },
-
-            {
-                headers: {
-                    application: 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+        api.post(`tasks/${id}/comments`, { comment: commentText })
+            .then((res) => {
+                console.log(res, "create task response");
+                if (res.status === 200) {
+                    setCommentText('')
+                    setReload(!reload)
                 }
-            }
-        ).then((res) => {
-            console.log(res, "create task response");
-            if (res.status === 200) {
-                setCommentText('')
-                setReload(!reload)
-            }
-        })
+            })
     }
 
     return (

@@ -101,22 +101,17 @@ const CreateUser = ({ popup }) => {
     // const formData = new FormData();
     // formData.append('image', profileImg);
     try {
-      await axios.post('http://localhost:9000/api/users', vals, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      }
-      ).then(res => {
-        console.log(res.data);
-        console.log(res, 66);
-        if (res.status === 200) {
+      await api.post('users', vals)
+        .then(res => {
+          console.log(res.data);
+          console.log(res, 66);
+          if (res.status === 200) {
 
-          setMessage("User Created Successfully!");
-          setShowToast(true)
-          popup(false)
-        }
-      })
+            setMessage("User Created Successfully!");
+            setShowToast(true)
+            popup(false)
+          }
+        })
     } catch (error) {
 
       setMessage("Something Went Wrong!");
