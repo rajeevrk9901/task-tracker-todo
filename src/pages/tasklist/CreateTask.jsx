@@ -4,7 +4,7 @@ import axios from 'axios'
 import Toast from '../../components/toast/Toast'
 import api from '../../utils/ApiServices'
 
-const CreateTask = ({ popup, setPopup }) => {
+const CreateTask = ({ popup, setPopup, setTaskReload, taskReload }) => {
 
   const { role } = useContext(AuthContext);
 
@@ -65,6 +65,7 @@ const CreateTask = ({ popup, setPopup }) => {
           // console.log(res, "create task response");
           setMessage("Task Created !")
           setShowToast(true)
+          setTaskReload(!taskReload)
           if (res.status === 200) {
             popup(false)
           }
