@@ -4,6 +4,7 @@ import Task from "./Task";
 import { BsListTask } from 'react-icons/bs'
 import { FcProcess } from 'react-icons/fc'
 import { BiTask } from 'react-icons/bi'
+import TaskShimmer from "../../components/shimmer/TaskShimmer";
 
 const TaskContainer = ({ tasks, status, handleTaskUpdate }) => {
     const handleDragOver = (e) => {
@@ -38,15 +39,20 @@ const TaskContainer = ({ tasks, status, handleTaskUpdate }) => {
                 </span>
             </h3>
 
-            <div className={`${taskContainer} flex flex-col gap-2`}>
-                {
-                    tasks
-                        .filter((task) => task.status === status)
-                        .map((task) => (
-                            <Task key={task._id} task={task} handleTaskUpdate={handleTaskUpdate} />
-                        ))
-                }
-            </div >
+
+
+
+            {tasks.length === 0 ? <TaskShimmer /> :
+
+                <div className={`${taskContainer} flex flex-col gap-2`}>
+                    {
+                        tasks
+                            .filter((task) => task.status === status)
+                            .map((task) => (
+                                <Task key={task._id} task={task} handleTaskUpdate={handleTaskUpdate} />
+                            ))
+                    }
+                </div >}
         </div >
     );
 };
