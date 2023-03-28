@@ -5,7 +5,6 @@ const Task = ({ task, handleTaskUpdate }) => {
     const [isDragging, setIsDragging] = useState(false);
 
     const name = localStorage.getItem("name");
-    console.log(name, 8)
 
 
     const handleDragStart = (e) => {

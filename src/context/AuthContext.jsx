@@ -7,6 +7,7 @@ const AuthProvider = ({ children }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(localStorage.getItem('role'));
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const [searchProduct, setSearchProduct] = useState("")
 
@@ -17,7 +18,7 @@ const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ role, setRole, isLoggedIn, setIsLoggedIn, setSearchProduct, searchProduct }}>
+    <AuthContext.Provider value={{ token, setToken, role, setRole, isLoggedIn, setIsLoggedIn, setSearchProduct, searchProduct }}>
       {children}
     </AuthContext.Provider>
   )

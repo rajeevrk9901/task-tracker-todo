@@ -21,15 +21,23 @@ const CreateTask = ({ popup, setPopup }) => {
 
   // console.log(users)
 
-  useEffect(() => {
-    api.get('users')
-      .then((res) => {
-        setUsers(res.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [])
+  role === "ADMIN" &&
+    useEffect(() => {
+      api.get('users',
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      )
+        .then((res) => {
+          setUsers(res.data)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }, [])
 
   const handleData = (e) => {
     const newTask = { ...task }
@@ -42,10 +50,17 @@ const CreateTask = ({ popup, setPopup }) => {
     setShowToast(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
 
     try {
-      api.post(`${role === "USER" ? "tasks" : "admin/task"} `, task)
+      await api.post(`${role === "USER" ? "tasks" : "admin/task"} `, task,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      )
         .then((res) => {
           // console.log(res, "create task response");
           setMessage("Task Created !")
@@ -73,14 +88,14 @@ const CreateTask = ({ popup, setPopup }) => {
 
       <div className='absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 shadow-2xl'>
         <div className='bg-slate-50 p-6 rounded-lg flex-row shodow-md shadow-slate-300 min-w-[350px] max-w-[400px] border-2 border-slate-200'>
-          <buton onClick={() => popup(false)} className='flex justify-end shadow-2xl'>
+          <button onClick={() => popup(false)} className='flex justify-end shadow-2xl'>
 
             <div className='cursor-pointer relative pr-3 w-6 h-4'>
               <div className='absolute bg-red-600  w-6 h-1 rotate-45'></div>
               <div className='absolute bg-red-600  w-6 h-1 -rotate-45'></div>
             </div>
 
-          </buton>
+          </button>
 
 
 
@@ -98,10 +113,10 @@ const CreateTask = ({ popup, setPopup }) => {
 
               {role === 'ADMIN' &&
                 <select value={task.user} placeholder="Select User" onChange={handleData} id="user" className='w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none mt-5'>
-                  <option value="" selected>Select User</option>
+                  <option value="" defaultValue={"Select User"} >Select User</option>
 
                   {users.map((user) => (
-                    <option value={user._id}>{user.name}</option>
+                    <option key={user._id} value={user._id}>{user.name}</option>
                   ))}
                   {/* <option value="user">User</option>
                 <option value="user2">User2</option> */}

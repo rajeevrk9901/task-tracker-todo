@@ -5,7 +5,7 @@ import axios from 'axios'
 import Toast from '../../components/toast/Toast'
 import api from '../../utils/ApiServices'
 
-const CreateUser = ({ popup }) => {
+const CreateUser = ({ popup, setReload, reload }) => {
 
   const [message, setMessage] = useState("")
   const [showToast, setShowToast] = useState(false);
@@ -115,6 +115,7 @@ const CreateUser = ({ popup }) => {
           if (res.status === 200) {
 
             setMessage("User Created Successfully!");
+            setReload(!reload)
             setShowToast(true)
             popup(false)
           }

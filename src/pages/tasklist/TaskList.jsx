@@ -51,7 +51,13 @@ const TaskList = () => {
         // console.log(`Task ${taskId} status changed to ${newStatus}.`)
 
         try {
-            const res = await api.put(`tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus }
+            const res = await api.put(`tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
 
             ).then((res) => {
                 // console.log(res, "create task response");
@@ -66,16 +72,9 @@ const TaskList = () => {
                 setTaskReload(!taskReload);
             })
         } catch (error) {
-
             console.log(error, 53)
             setToastMessage(error.response.data.message)
             setToast(true)
-
-            // if (error.response.status === 400) {
-            //     setToastMessage("Already DONE task cannot be updated")
-            //     setToast(true)
-            // }
-            // console.error(error);
         }
 
     };
@@ -104,9 +103,7 @@ const TaskList = () => {
             console.error(error);
         }
 
-
-
-    }, [taskReload, popup]);
+    }, [taskReload]);
 
 
     const handleToastClose = () => {

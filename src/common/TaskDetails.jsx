@@ -3,12 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import api from '../utils/ApiServices'
 import { format } from 'date-fns'
+import { AuthContext } from '../context/AuthContext'
+import { useContext } from 'react'
 
 
 
 const TaskDetails = () => {
 
     const { id } = useParams()
+    const { token } = useContext(AuthContext)
     // console.log(id)
 
     const [task, setTask] = React.useState([])
@@ -21,7 +24,13 @@ const TaskDetails = () => {
     // console.log(task)
 
     useEffect(() => {
-        api.get(`tasks/${id}`)
+        api.get(`tasks/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            }
+        )
             .then((res) => {
                 setTask(res.data)
                 console.log(res.data)
@@ -48,7 +57,13 @@ const TaskDetails = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        api.post(`tasks/${id}/comments`, { comment: commentText })
+        api.post(`tasks/${id}/comments`, { comment: commentText },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            }
+        )
             .then((res) => {
                 // console.log(res, "create task response");
                 if (res.status === 200) {

@@ -14,6 +14,7 @@ const UserList = () => {
 
   const [popup, setPopup] = useState(false)
   const [users, setUsers] = useState([])
+  const [reload, setReload] = useState(false)
 
   const [stat, setStat] = useState([])
 
@@ -25,26 +26,38 @@ const UserList = () => {
   }
 
   useEffect(() => {
-    api.get('users')
+    api.get('users',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }
+    )
       .then((res) => {
         setUsers(res.data)
       })
       .catch((error) => {
         console.error(error)
       })
-  }, [popup])
+  }, [reload])
 
 
   // http://192.168.0.169:9000/api/status
   useEffect(() => {
-    api.get('status')
+    api.get('status', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
       .then((res) => {
         setStat(res.data)
       })
       .catch((error) => {
         console.error(error)
       })
-  }, [popup])
+  }, [])
 
 
 
@@ -54,7 +67,7 @@ const UserList = () => {
   return (
     <div className='flex flex-col h-[85vh] w-full gap-10 '>
 
-      {popup && <CreateUser popup={setPopup} />}
+      {popup && <CreateUser reload={reload} setReload={setReload} popup={setPopup} />}
       <div className='flex flex-row justify-between gap-5 md:px-16 px-5 py-8'>
         <div>
           <input type="text" placeholder='Search...' className='outline outline-slate-400 rounded-md px-3 py-2  focus:outline-2 focus:outline-blue-500' />
@@ -66,7 +79,7 @@ const UserList = () => {
       {/* userlist */}
       <div className='2xl:grid-cols-4 lg:grid-cols-3 grid md:grid-cols-2 sm:grid-cols-1 gap-10 place-items-center overflow-y-auto overflow-x-hidden py-2 md:px-16 px-5 scrollbar'>
         {users.map((user) => (
-          <div className='flex flex-col gap-6 bg-gray-300 shadow-2xl p-5 rounded-lg gap-y-5 min-w-[320px] max-w-[350px]' key={user.id}>
+          <div className='flex flex-col gap-6 bg-gray-300 shadow-2xl p-5 rounded-lg gap-y-5 min-w-[320px] max-w-[350px]' key={user._id}>
             <div className='flex flex-row gap-x-5'>
               <img src={user.profileImg} alt="User Image" className='w-20 h-20 rounded-full border-2' />
               <div className='flex flex-col gap-y-2'>
