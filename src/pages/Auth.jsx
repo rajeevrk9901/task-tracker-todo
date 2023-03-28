@@ -9,7 +9,7 @@ import api from '../utils/ApiServices'
 const Auth = () => {
   const navigate = useNavigate()
 
-  const { setRole } = useContext(AuthContext)
+  const { setRole, setToken } = useContext(AuthContext)
   const [message, setMessage] = useState("")
   const [showToast, setShowToast] = useState(false);
 
@@ -65,19 +65,17 @@ const Auth = () => {
     await api.post("login", data,
       {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       }
     )
       .then(res => {
-
-        // console.log(res.data);
-        // if (res.data.success) {
-
-        setRole(res.data.role)
         localStorage.setItem("role", res.data.role)
         localStorage.setItem("token", res.data.token)
         localStorage.setItem("name", res.data.name)
+        setRole(res.data.role)
+        setToken(res.data.token)
+        console.log(res.data.token, res.data.name, 80);
         navigate("/tasks")
         // }
 

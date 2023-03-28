@@ -14,6 +14,7 @@ const TaskList = () => {
 
     const [tasks, setTasks] = useState([]);
     const [taskReload, setTaskReload] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false)
     const [popup, setPopup] = useState(false)
     const [toast, setToast] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
@@ -51,7 +52,13 @@ const TaskList = () => {
         // console.log(`Task ${taskId} status changed to ${newStatus}.`)
 
         try {
-            const res = await api.put(`tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus }
+            const res = await api.put(`tasks/${role === "ADMIN" ? "admin/" + taskId : taskId}`, { status: newStatus },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
 
             ).then((res) => {
                 // console.log(res, "create task response");
@@ -60,22 +67,13 @@ const TaskList = () => {
                     console.log("updated")
                     setToastMessage("Task Moved To " + newStatus)
                     setToast(true)
+                    setTaskReload(!taskReload)
                 }
-
-
-                setTaskReload(!taskReload);
             })
         } catch (error) {
-
             console.log(error, 53)
             setToastMessage(error.response.data.message)
             setToast(true)
-
-            // if (error.response.status === 400) {
-            //     setToastMessage("Already DONE task cannot be updated")
-            //     setToast(true)
-            // }
-            // console.error(error);
         }
 
     };
@@ -87,32 +85,30 @@ const TaskList = () => {
 
 
     useEffect(() => {
-
-        try {
-            api.get(`tasks`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            }).then((response) => {
-                console.log(response, "response");
+        const fetchTasks = async () => {
+            try {
+                const response = await api.get(`tasks`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
                 setTasks(response.data);
-            });
-
-        } catch (error) {
-            setToastMessage(error.response.data.message)
-            setToast(true)
-            console.error(error);
+            } catch (error) {
+                setToastMessage(error.response.data.message)
+                setToast(true)
+                console.error(error);
+            }
         }
 
+        fetchTasks();
+    }, [taskReload]);
 
-
-    }, [taskReload, popup]);
 
 
     const handleToastClose = () => {
         setToast(false);
     };
-
 
 
     const handleSearch = (e) => {
@@ -124,7 +120,7 @@ const TaskList = () => {
 
 
 
-    return tasks.length === 0 ? <h1>Shimmer ....</h1> : (
+    return (
         <div className="w-[1200px] overflow-x-auto">
             {toast && <Toast message={toastMessage} onClose={handleToastClose} />}
             {popup && <CreateTask popup={setPopup} />}
@@ -137,6 +133,7 @@ const TaskList = () => {
                     <button onClick={handlePopup} className="bg-blue-200 px-3 py-1 shadow-md rounded-md">Add Task</button>
                 </div>
             </div>
+
             <div className=" grid grid-cols-3 w-[1200px] h-[85vh] overflow-x-auto px-16 gap-12  py-6 ">
                 <TaskContainer tasks={searchResult} status="TODO" handleTaskUpdate={handleTaskUpdate} />
                 <TaskContainer tasks={searchResult} status="INPROGRESS" handleTaskUpdate={handleTaskUpdate} />
