@@ -48,7 +48,7 @@ const Header = () => {
             {/* {(!role === "USER") || (!role === "ADMIN") && */}
             {!role && <button> <Link to="/" className='font-semibold text-lg bg-blue-400 text-white px-4 py-1 rounded-md outline-none hover:text-gray-600 active:bg-blue-600 border-b-2 hover:border-b-0'>Login</Link> </button>}
 
-            {role && <span> <p className='font-semibold border-l-2 border-r-2 text-lg text-blue-500 px-1 rounded-md '>{name}</p> </span>}
+            {role && <span className='font-semibold border-l-2 border-r-2 text-lg text-blue-500 px-1 rounded-md '>{name}</span>}
 
             {role && <button onClick={logout}> <Link to="/logout" className='font-semibold text-lg bg-red-400 text-white px-4 py-1 rounded-md outline-none hover:text-gray-600 '>Logout</Link> </button>}
         </header>

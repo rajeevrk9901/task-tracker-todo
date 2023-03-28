@@ -62,6 +62,13 @@ const Auth = () => {
   const handleSubmit = async (e) => {
     // e.preventDefault();
     // console.log(data);
+    if (data.email === '' || data.password === '') {
+      setMessage("All fields are required")
+      setShowToast(true)
+      return
+    }
+
+
     await api.post("login", data,
       {
         headers: {
@@ -75,7 +82,7 @@ const Auth = () => {
         localStorage.setItem("name", res.data.name)
         setRole(res.data.role)
         setToken(res.data.token)
-        console.log(res.data.token, res.data.name, 80);
+        // console.log(res.data.token, res.data.name, 80);
         navigate("/tasks")
         // }
 
@@ -90,6 +97,33 @@ const Auth = () => {
     setShowToast(false);
   };
 
+  const handleGuestLogin = async () => {
+    await api.post("login", {
+      email: "amit@gmail.com",
+      password: "amit",
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+      .then(res => {
+        localStorage.setItem("role", res.data.role)
+        localStorage.setItem("token", res.data.token)
+        localStorage.setItem("name", res.data.name)
+        setRole(res.data.role)
+        setToken(res.data.token)
+        // console.log(res.data.token, res.data.name, 80);
+        navigate("/tasks")
+        // }
+
+      }).catch(err => {
+        setMessage(err.response.data.message)
+        setShowToast(true)
+        console.log(err, 81);
+      })
+  }
 
 
   return (
@@ -115,6 +149,8 @@ const Auth = () => {
               </div>
 
               <button type='button' onClick={handleSubmit} className='w-full px-6 py-2 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button>
+
+              <button type='button' onClick={handleGuestLogin} className='w-full px-4 py-1 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-gray-500 to-slate-500 cursor-pointer text-gray-100  hover:duration-500 hover:scale-95'>Guest Login</button>
             </div>
           </form>
         </div>
