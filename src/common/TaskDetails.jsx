@@ -41,7 +41,13 @@ const TaskDetails = () => {
     }, [])
 
     useEffect(() => {
-        api.get(`tasks/${id}/comments`)
+        api.get(`tasks/${id}/comments`,
+               {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            }
+               )
             .then((res) => {
                 setComment(res.data)
                 console.log(res.data)
