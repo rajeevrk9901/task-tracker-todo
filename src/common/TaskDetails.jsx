@@ -41,7 +41,13 @@ const TaskDetails = () => {
     }, [])
 
     useEffect(() => {
-        api.get(`tasks/${id}/comments`)
+        api.get(`tasks/${id}/comments`,
+               {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            }
+               )
             .then((res) => {
                 setComment(res.data)
                 console.log(res.data)
@@ -80,7 +86,7 @@ const TaskDetails = () => {
                     <h1 className='text-blue-900 font-bold text-2xl'>{task.title}</h1>
                     <button className='text-xs px-2 py-1 border-2 text-green-600 font-semibold'>{task.status}</button>
                 </div>
-                {task.createdBy === "ADMIN" && <p className='text-gray-500 text-sm'>Created by {task.createdBy} on {task.createdAt && format(new Date(task.createdAt), 'dd MMM yyyy HH:mm')}</p>}
+                {task.createdBy && <p className='text-gray-500 text-sm'>Created by {task.createdBy} on {task.createdAt && format(new Date(task.createdAt), 'dd MMM yyyy HH:mm')}</p>}
 
                 <p className='font-semibold'>{task.description}</p>
             </div>

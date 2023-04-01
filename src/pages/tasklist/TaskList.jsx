@@ -14,7 +14,7 @@ const TaskList = () => {
 
     const [tasks, setTasks] = useState([]);
     const [taskReload, setTaskReload] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false)
+
     const [popup, setPopup] = useState(false)
     const [toast, setToast] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
@@ -85,23 +85,22 @@ const TaskList = () => {
 
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const response = await api.get(`tasks`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
+
+        try {
+            api.get(`tasks`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            }).then((response) => {
                 setTasks(response.data);
-            } catch (error) {
-                setToastMessage(error.response.data.message)
-                setToast(true)
-                console.error(error);
-            }
+            });
+        } catch (error) {
+            setToastMessage(error.response.data.message)
+            setToast(true)
+            console.error(error);
         }
 
-        fetchTasks();
     }, [taskReload]);
 
 
@@ -123,7 +122,7 @@ const TaskList = () => {
     return (
         <div className="w-[1200px] overflow-x-auto">
             {toast && <Toast message={toastMessage} onClose={handleToastClose} />}
-            {popup && <CreateTask popup={setPopup} />}
+            {popup && <CreateTask taskReload={taskReload} setTaskReload={setTaskReload} popup={setPopup} />}
 
             <div className='flex md:flex-row flex-col gap-5 absolute md:left-44 right-0'>
                 <div>
