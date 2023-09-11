@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 import Toast from '../components/toast/Toast'
 import api from '../utils/ApiServices'
-
+import styled, { css } from 'styled-components';
 
 const Auth = () => {
   const navigate = useNavigate()
@@ -12,6 +12,7 @@ const Auth = () => {
   const { setRole, setToken } = useContext(AuthContext)
   const [message, setMessage] = useState("")
   const [showToast, setShowToast] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [data, setData] = useState({
     email: '',
@@ -59,71 +60,77 @@ const Auth = () => {
   //   isValid && handleSubmit();
   // }
 
+  // Define a styled component for the fieldset
+  const StyledFieldset = styled.fieldset`
+  /* Common styles for the fieldset when not disabled */
+  border: 1px solid #ccc;
+  padding: 16px;
+
+  /* Conditionally apply styles when disabled */
+  ${(props) =>
+      props.disabled &&
+      css`
+      opacity: 0.5;
+      cursor: not-allowed;
+    
+      /* Target all input elements within nested div elements */
+      & div input {
+        background-color: #f2f2f2;
+        cursor: not-allowed;
+      }
+    `}
+`;
+
   const handleSubmit = async (e) => {
     // e.preventDefault();
     // console.log(data);
     if (data.email === '' || data.password === '') {
-      setMessage("All fields are required")
-      setShowToast(true)
-      return
+      setMessage("All fields are required");
+      setShowToast(true);
+      return;
     }
 
+    try {
+      // Set loading state to true before making the API request
+      setIsLoading(true);
 
-    await api.post("login", data,
-      {
+      const response = await api.post("login", data, {
         headers: {
           'Content-Type': 'application/json'
         }
-      }
-    )
-      .then(res => {
-        localStorage.setItem("role", res.data.role)
-        localStorage.setItem("token", res.data.token)
-        localStorage.setItem("name", res.data.name)
-        setRole(res.data.role)
-        setToken(res.data.token)
-        // console.log(res.data.token, res.data.name, 80);
-        navigate("/tasks")
-        // }
+      });
 
-      }).catch(err => {
-        setMessage(err.response.data.message)
-        setShowToast(true)
-        console.log(err, 81);
-      })
-  }
+      localStorage.setItem("role", response.data.role);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("name", response.data.name);
+      setRole(response.data.role);
+      setToken(response.data.token);
+      // console.log(response.data.token, response.data.name, 80);
+      navigate("/tasks");
+    } catch (err) {
+      setMessage(err.response.data.message);
+      setShowToast(true);
+      console.error(err, 81);
+    } finally {
+      // Set loading state to false after the API request (whether successful or not)
+      setIsLoading(false);
+    }
+  };
+
 
   const handleToastClose = () => {
     setShowToast(false);
   };
 
   const handleGuestLogin = async () => {
-    await api.post("login", {
+    setData({
       email: "amit@gmail.com",
-      password: "amit",
-    },
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    )
-      .then(res => {
-        localStorage.setItem("role", res.data.role)
-        localStorage.setItem("token", res.data.token)
-        localStorage.setItem("name", res.data.name)
-        setRole(res.data.role)
-        setToken(res.data.token)
-        // console.log(res.data.token, res.data.name, 80);
-        navigate("/tasks")
-        // }
+      password: "amit"
+    });
 
-      }).catch(err => {
-        setMessage(err.response.data.message)
-        setShowToast(true)
-        console.log(err, 81);
-      })
   }
+
+
 
 
   return (
@@ -134,24 +141,33 @@ const Auth = () => {
       <div className='flex md:flex-row flex-col-reverse justify-center'>
         <div className='bg-slate-50 p-6 rounded-lg shodow-md shadow-slate-300 md:w-[400px] w-[100%] border-2 border-slate-200'>
           <h2 className='uppercase font-bold text-2xl flex items-center justify-center mb-6 text-slate-700'>Login</h2>
-          <form>
-            <div>
-              <div className='mt-2'>
-                <label htmlFor="email" className='text-lg'>Email</label>
-                <input value={data.email} onChange={handleData} id="email" name='email' type="email" placeholder='Enter Your Email' className='w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none' />
-                <p className='text-red-600 text-sm'>{error.email}</p>
+          <form >
+            <StyledFieldset disabled={isLoading}>
+              <div>
+                <div className='mt-2'>
+                  <label htmlFor="email" className='text-lg'>Email</label>
+                  <input value={data.email} onChange={handleData} id="email" name='email' type="email" placeholder='Enter Your Email' className='w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none' />
+                  <p className='text-red-600 text-sm'>{error.email}</p>
+                </div>
+
+                <div className='mt-5'>
+                  <label htmlFor="password" className='text-lg'>Password</label>
+                  <input value={data.password} onChange={handleData} id="password" name="password" type="password" placeholder='Enter Your Password' className='w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none' />
+                  <p className='text-red-600 text-sm'>{error.password}</p>
+                </div>
+
+                {/* <button type='button' onClick={handleSubmit} className='w-full px-6 py-2 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button> */}
+
+                <button type="button" onClick={handleSubmit} className="w-full px-6 py-2 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95" disabled={isLoading}>
+                  <div className={`relative inline-block w-5 h-5 mr-2 ${!isLoading ? "hidden" : ""}`}>
+                    <div className="right-0 w-full h-full animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-safe:animate-spin"></div>
+                  </div>
+                  <span className="inline"> {!isLoading ? "Login" : "Loading..."}</span>
+                </button>
+
+                <button type='button' onClick={handleGuestLogin} className='w-full px-4 py-1 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-gray-500 to-slate-500 cursor-pointer text-gray-100  hover:duration-500 hover:scale-95'>Guest Login</button>
               </div>
-
-              <div className='mt-5'>
-                <label htmlFor="password" className='text-lg'>Password</label>
-                <input value={data.password} onChange={handleData} id="password" name="password" type="password" placeholder='Enter Your Password' className='w-full rounded-md py-2 px-3 bg-transparent shadow-sm  border-2 border-blue-500 focus:border-2 focus:border-yellow-700 outline-none' />
-                <p className='text-red-600 text-sm'>{error.password}</p>
-              </div>
-
-              <button type='button' onClick={handleSubmit} className='w-full px-6 py-2 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer text-gray-100 font-bold text-xl hover:duration-500 hover:scale-95'>Login</button>
-
-              <button type='button' onClick={handleGuestLogin} className='w-full px-4 py-1 mt-5 m-auto flex items-center justify-center rounded-md bg-gradient-to-r from-gray-500 to-slate-500 cursor-pointer text-gray-100  hover:duration-500 hover:scale-95'>Guest Login</button>
-            </div>
+            </StyledFieldset>
           </form>
         </div>
 
