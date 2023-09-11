@@ -126,7 +126,7 @@ const TaskList = () => {
 
             <div className='flex md:flex-row flex-col gap-5 absolute md:left-44 right-0'>
                 <div>
-                    <input onChange={handleSearch} value={search} type="text" placeholder='Search...' className='w-24 outline-slate-400 rounded-md px-3 py-1  focus:outline-2 focus:outline-blue-500 focus:w-full' />
+                    <input onChange={handleSearch} value={search} type="text" placeholder='Search...' className='w-36 outline-slate-400 rounded-md px-3 py-1  focus:outline-2 focus:outline-blue-500 ' />
                 </div>
                 <div>
                     <button onClick={handlePopup} className="bg-blue-200 px-3 py-1 shadow-md rounded-md">Add Task</button>

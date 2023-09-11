@@ -88,10 +88,10 @@ const CreateTask = ({ popup, setPopup, setTaskReload, taskReload }) => {
 
 
       <div className='absolute z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 shadow-2xl'>
-        <div className='bg-slate-50 p-6 rounded-lg flex-row shodow-md shadow-slate-300 min-w-[350px] max-w-[400px] border-2 border-slate-200'>
-          <button onClick={() => popup(false)} className='flex justify-end shadow-2xl'>
+        <div className='bg-slate-50 relative p-6 rounded-lg flex-row shodow-md shadow-slate-300 min-w-[350px] max-w-[400px] border-2 border-slate-200'>
+          <button onClick={() => popup(false)} className='absolute right-4   flex justify-end shadow-2xl'>
 
-            <div className='cursor-pointer relative pr-3 w-6 h-4'>
+            <div className='cursor-pointer relative pr-3 w-6 h-4 hover:bg-gray-300'>
               <div className='absolute bg-red-600  w-6 h-1 rotate-45'></div>
               <div className='absolute bg-red-600  w-6 h-1 -rotate-45'></div>
             </div>
